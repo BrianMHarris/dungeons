@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
-from project.models import User
 import os
 
 app = Flask(__name__)
@@ -29,12 +28,14 @@ login_manager.login_view = "users.login"
 login_manager.login_message = "Please log in."
 
 # import and register blueprints for our resources
-from projects.users.views import users_blueprint
+from project.users.views import users_blueprint
 app.register_blueprint(users_blueprint, url_prefix='/users')
 
 @app.route('/')
 def root():
     return "Go home, you're drunk"
+
+from project.models import User
 
 @login_manager.user_loader
 def load_user(user_id):
