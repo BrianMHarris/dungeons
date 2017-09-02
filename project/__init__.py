@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_modus  import Modus
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
@@ -33,7 +33,7 @@ app.register_blueprint(users_blueprint, url_prefix='/users')
 
 @app.route('/')
 def root():
-    return "Go home, you're drunk"
+    return render_template('index.html')
 
 from project.models import User
 

@@ -1,9 +1,7 @@
-Introduction:
+About:
 
+Why I chose this project:
 
-How to Run:
+Built With:
 
-
-
-
-Technologies Used:
+License:
