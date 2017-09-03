@@ -1,6 +1,10 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask import Blueprint, redirect, render_template, request, url_for, flash, session
 from project.models import User
-from project import db
+from project.users.forms import UserSignupForm, UserLoginForm, UserForm
+from project import db, bcrypt
+from functools import wraps
+from flask_login import login_user, logout_user, current_user, login_required
+from sqlalchemy.exc import IntegrityError
 
 users_blueprint = Blueprint(
     'users',
@@ -8,21 +12,44 @@ users_blueprint = Blueprint(
     template_folder = 'templates'
 )
 
-# NOTE: None of the following routes should redirect
+# decorator for making sure the current user is authorized
+# def ensure_correct_user(fn):
+#     wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         if kwargs.get('id') != current_user.id:
+#             flash("Not Authorized")
+#             return redirect(url_for('users.index'))
+#         return fn(*args, **kwargs)
+#     return wrapper
 
+# NOTE: index is currently used as a login/signup controller
 @users_blueprint.route('/', methods=["GET", "POST"])
 def index():
-    # View the user information if just a get, pass authorization to toggle edit button, etc
-    # Post a new user and redirect if post request
+    new_user = False
+    form_new = UserSignupForm(request.form)
+    if current_user.is_authenticated == False:  # If the user doesn't exist or hasn't logged in
+        new_user = True
+    else:
+        return redirect(url_for('users.show', id=current_user.id))
     # make sure to send a signup / login form for the invisible modal to hold
-    return render_template('users/index.html')
+    return render_template('users/index.html', new_user=new_user, form_new=form_new)
 
-@users_blueprint.route('/signup')
+@users_blueprint.route('/signup', methods=["POST"])
 def signup():
-    # arrive here from the signup login modal based on which button you choose
-    # creates a new user and sends you to login automatically
-    # if the session has an id, redirect!
-    pass
+    # Post a new user and redirect
+    form = UserSignupForm(request.form)
+    if form.validate():
+        try:
+            new_user = User(form.data['username'], form.data['password'])
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user) # replaces need for setting session id
+            flash("YOU MADE AN ACCOUNT")
+        except IntegrityError as e:
+            flash("Username already taken")
+    else:
+        flash("BAD FORM")
+    return redirect(url_for('users.index'))
 
 @users_blueprint.route('/login')
 def login():
@@ -32,15 +59,58 @@ def login():
     pass
 
 @users_blueprint.route('/<int:id>/edit')
+@login_required
+# @ensure_correct_user
 def edit(id):
-    # find the user and populate the form, display it!
-    # this is possible redirect...
-    return render_template('users/edit.html', id=id)
+    user = User.query.get_or_404(id)
+    form = UserForm(obj=user)
+    flash("Edit User")
+    return render_template('users/edit.html', id=id, form=form)
 
-@users_blueprint.route('/<int:id>')
+@users_blueprint.route('/<int:id>/delete', methods=['GET', 'DELETE'])
+@login_required
+def delete(id):
+    user = User.query.get_or_404(id)
+    # if they choose to delete their account, make them log in to confirm
+    if request.method == b"DELETE":
+        form_login = UserLoginForm(request.form)
+        if bcrypt.check_password_hash(user.password, form_login.password.data):
+            db.session.delete(user)
+            db.session.commit()
+            logout_user()
+            flash("Profile Deleted")
+            return redirect(url_for('root'))
+        else:
+            print("Password incorrect")
+            flash("Password incorrect")
+    # just in case they didn't actually delete
+    form_login = UserLoginForm()
+    return render_template('users/delete.html', id=id, form_login=form_login)
+
+@users_blueprint.route('/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
+@login_required
+# @ensure_correct_user
 def show(id):
+    user = User.query.get_or_404(id)
     # if authenticated let them view the user
-    # if they are trying to patch and authorized, do the work, send them to index
-    # if they are not authorized, just show them them the limited profile
-    #   this is a full page reload
-    return render_template('users/index.html')
+    # if they are trying to patch and authorized, do the work, show their updated profile
+    authorized = current_user.id == id
+    if request.method == b'PATCH':
+        form = UserForm(request.form)
+        user.username = form.username.data
+        user.email = form.email.data
+        user.image_url = form.image_url.data
+        db.session.add(user)
+        db.session.commit()
+        flash("User Updated")
+        return redirect(url_for('users.show', id=id))
+    # if they choose to delete their account, make them log in to confirm
+    # if request.method == b"Delete":
+    #     form = UserLoginForm(request.form)
+    #     if bcrypt.check_password_hash(user.password, form.password.data):
+    #         db.session.delete(user)
+    #         db.session.commit()
+    #         logout_user()
+    #         return redirect(url_for('root'))
+    # if they are not authorized, just show them them the limited profile, no edit
+    return render_template('users/show.html', id=id, user=user, authorized=authorized)

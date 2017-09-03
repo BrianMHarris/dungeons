@@ -1,1 +1,22 @@
-Stuff
+{% extends 'base.html' %}
+{% block content %}
+  {% if new_user %}
+    <form method="POST" action="{{ url_for('users.signup') }}">
+      {{ form_new.csrf_token }}
+      {% for field in form_new if field.widget.input_type != 'hidden'%}
+        <p>
+        {{ field.label }}
+        {{ field }}
+        <span>
+          {% if field.errors %}
+            {% for error in field.errors %}
+              {{ error }}
+            {% endfor %}
+          {% endif %}
+        </span>
+      </p>
+      {% endfor %}
+      <button type="submit">Sign Up!</button>
+    </form>
+  {% endif %}
+{% endblock %}

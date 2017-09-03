@@ -2,33 +2,89 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" type="text/css" href="/static/css/styles.css"> -->
   <title>EZ Games</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
   <!-- Optional theme -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- JavaScript Library -->
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
-
-  <link rel="stylesheet" href="././static/css/styles.css">
+  <style>
+    .title-bar {
+      background-color: black;
+      text-align: center;
+    }
+    .nav-container {
+      background-color: white;
+    }
+    .navbar {
+      background-color: white;
+      border-width: 0;
+      box-shadow: none;
+    }
+    /*.content-container {
+      background-color: black;
+      height:200px;
+    }
+    .site-content {
+      background-color: white;
+      height:200px;
+    }*/
+  </style>
 <body>
-<div class="row">
-      <div class="col-xs-12 col-md-8">I take up the whole row on small screens, 2/3rds on a medium (or larger) screen.</div>
-      <div class="col-xs-6 col-md-4">I take up half a row on small screens, 1/3rd on a medium (or larger) screen.</div>
+  <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="row title-bar">
+      <img src="https://i.ytimg.com/vi/nomNd-1zBl8/maxresdefault.jpg" alt="" width="64" height="64">
     </div>
+    <nav class="navbar navbar-default">
+      <div class="nav-container container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Brand</a>
+        </div>
 
-    <div class="row">
-      <div class="col-xs-6 col-md-4">I take up half a row on small screens, 1/3rd on a medium (or larger) screen.</div>
-      <div class="col-xs-6 col-md-4">I take up half a row on small screens, 1/3rd on a medium (or larger) screen.</div>
-      <div class="col-xs-6 col-md-4 col-lg-12">I take up half a row on small screens, 1/3rd on a medium (or larger) screen, and a full row on a large screen.</div>
-    </div>
-
-    <div class="row">
-      <div class="col-xs-6">I always take up half a row.</div>
-      <div class="col-xs-6">I always take up half a row.</div>
-    </div>
-  {% block content %}
-
-  {% endblock %}
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Games</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li id="link-user class=""><a href="{{ url_for('users.index') }}">My Account</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <div class="row content-container">
+      <div class="site-content col-xs-8 col-xs-offset-2">
+        {% block content %}
+          {% with message = get_flashed_messages() %}
+            {% if messages %}
+              <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
+        {% endblock %}
+      </div>
+    </div> <!-- content container -->
+  </div> <!-- main container -->
 </body>
 </html>

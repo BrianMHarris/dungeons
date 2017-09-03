@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <p>
+    Username: {{ user.username }} <br>
+    Avatar: <img src="{{ user.image_url }}" alt="<User Avatar>" width=96 height=96>
+  </p>
+  {% if authorized %}
+    <form action="{{url_for('users.edit', id=id)}}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit">EDIT USER</button>
+    </form>
+  {% endif %}
+{% endblock %}
