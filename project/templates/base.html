@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <!-- <link rel="stylesheet" type="text/css" href="/static/css/styles.css"> -->
-  <title>EZ Games</title>
+  <title>EZ-Games</title>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -72,16 +72,17 @@
     </nav>
     <div class="row content-container">
       <div class="site-content col-xs-8 col-xs-offset-2">
+        {% with message = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
         {% block content %}
-          {% with message = get_flashed_messages() %}
-            {% if messages %}
-              <ul class=flashes>
-                {% for message in messages %}
-                  <li>{{ message }}</li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          {% endwith %}
+
         {% endblock %}
       </div>
     </div> <!-- content container -->

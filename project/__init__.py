@@ -4,13 +4,17 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf.csrf import CSRFProtect
 from flask_bcrypt import Bcrypt
+from project import config
 import os
 
 app = Flask(__name__)
 
+# If we are in production, make sure we DO NOT use the debug mode
+if os.environ.get('ENV') == 'production':
+    app.config.from_object('config.ProductionConfig')
+else:
+    app.config.from_object('config.DevelopmentConfig')
 
-# settings for Flask to connect to postgres
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://localhost/dungeons-database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # allows user to use their session

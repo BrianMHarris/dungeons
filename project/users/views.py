@@ -13,14 +13,14 @@ users_blueprint = Blueprint(
 )
 
 # decorator for making sure the current user is authorized
-# def ensure_correct_user(fn):
-#     wraps(fn)
-#     def wrapper(*args, **kwargs):
-#         if kwargs.get('id') != current_user.id:
-#             flash("Not Authorized")
-#             return redirect(url_for('users.index'))
-#         return fn(*args, **kwargs)
-#     return wrapper
+def ensure_correct_user(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        if kwargs.get('id') != current_user.id:
+            flash("Not Authorized")
+            return redirect(url_for('users.index'))
+        return fn(*args, **kwargs)
+    return wrapper
 
 # NOTE: index is currently used as a login/signup controller
 @users_blueprint.route('/', methods=["GET", "POST"])
@@ -40,7 +40,7 @@ def signup():
     form = UserSignupForm(request.form)
     if form.validate():
         try:
-            new_user = User(form.data['username'], form.data['password'])
+            new_user = User(form.data['username'], form.data['email'], form.data['password'])
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user) # replaces need for setting session id
@@ -60,7 +60,7 @@ def login():
 
 @users_blueprint.route('/<int:id>/edit')
 @login_required
-# @ensure_correct_user
+@ensure_correct_user
 def edit(id):
     user = User.query.get_or_404(id)
     form = UserForm(obj=user)
