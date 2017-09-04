@@ -15,34 +15,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/static/css/styles.css">
   </head>
-  <style>
-    .title-bar {
-      background-color: black;
-      text-align: center;
-    }
-    .nav-container {
-      background-color: white;
-    }
-    .navbar {
-      background-color: white;
-      border-width: 0;
-      box-shadow: none;
-    }
-    /*.content-container {
-      background-color: black;
-      height:200px;
-    }
-    .site-content {
-      background-color: white;
-      height:200px;
-    }*/
-  </style>
 <body>
   <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <!-- Title Row -->
     <div class="row title-bar">
       <img src="https://i.ytimg.com/vi/nomNd-1zBl8/maxresdefault.jpg" alt="" width="64" height="64">
     </div>
+
+    <!-- Main Nav-Bar for entire site -->
     <nav class="navbar navbar-default">
       <div class="nav-container container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -65,22 +47,34 @@
             <li><a href="#">Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li id="link-user class=""><a href="{{ url_for('users.index') }}">My Account</a></li>
+            <!-- If the user is logged in, let them access their account -->
+            <li id="link-user class="">
+              <a href="{{ url_for('users.index') }}">
+                {% if current_user.is_authenticated %}
+                  My Account
+                {% else %}
+                  Sign Up/Login
+                {% endif %}
+              </a>
+            </li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
     <div class="row content-container">
       <div class="site-content col-xs-8 col-xs-offset-2">
-        {% with message = get_flashed_messages() %}
+        <!-- all flash messages should be at the top of the content -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <ul class="flashes">
-              {% for message in messages %}
-                <li>{{ message }}</li>
-              {% endfor %}
-            </ul>
+            {% for category, message in messages %}
+              <div class="alert {{ category }}" role="alert">
+                <strong>{{ message }}</strong>
+              </div>
+            {% endfor %}
           {% endif %}
         {% endwith %}
+
+        <!-- main content from .html files extending base -->
         {% block content %}
 
         {% endblock %}

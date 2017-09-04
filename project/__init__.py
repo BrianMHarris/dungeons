@@ -34,6 +34,9 @@ login_manager.login_message = "Please log in."
 from project.users.views import users_blueprint
 app.register_blueprint(users_blueprint, url_prefix='/users')
 
+from project.games.views import games_blueprint
+app.register_blueprint(games_blueprint, url_prefix='/games')
+
 @app.route('/')
 def root():
     return render_template('index.html')

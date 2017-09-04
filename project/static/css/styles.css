@@ -1,0 +1,12 @@
+.title-bar {
+      background-color: black;
+      text-align: center;
+}
+.nav-container {
+  background-color: white;
+}
+.navbar {
+  background-color: white;
+  border-width: 0;
+  box-shadow: none;
+}

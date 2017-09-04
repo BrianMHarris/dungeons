@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, render_template, request, url_for, flash, session
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from project.models import User
 from project.users.forms import UserSignupForm, UserLoginForm, UserForm
 from project import db, bcrypt
@@ -17,7 +17,8 @@ def ensure_correct_user(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         if kwargs.get('id') != current_user.id:
-            flash("Not Authorized")
+            from IPython import embed; embed()
+            flash("Not Authorized", "alert-danger")
             return redirect(url_for('users.index'))
         return fn(*args, **kwargs)
     return wrapper
@@ -44,11 +45,11 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user) # replaces need for setting session id
-            flash("YOU MADE AN ACCOUNT")
+            flash("Profile Created", "alert-success")
         except IntegrityError as e:
-            flash("Username already taken")
+            flash("Username already taken", "alert-warning")
     else:
-        flash("BAD FORM")
+        flash("Invalid form", "alert-danger")
     return redirect(url_for('users.index'))
 
 @users_blueprint.route('/login')
@@ -58,17 +59,25 @@ def login():
     # not a full page reload, use default values for anything not covered in the form!
     pass
 
+@users_blueprint.route('/<int:id>/logout')
+@login_required
+@ensure_correct_user
+def logout(id):
+    logout_user();
+    flash("Logged Out", "alert-info")
+    return redirect(url_for('root'))
+
 @users_blueprint.route('/<int:id>/edit')
 @login_required
 @ensure_correct_user
 def edit(id):
     user = User.query.get_or_404(id)
     form = UserForm(obj=user)
-    flash("Edit User")
     return render_template('users/edit.html', id=id, form=form)
 
 @users_blueprint.route('/<int:id>/delete', methods=['GET', 'DELETE'])
 @login_required
+@ensure_correct_user
 def delete(id):
     user = User.query.get_or_404(id)
     # if they choose to delete their account, make them log in to confirm
@@ -78,18 +87,16 @@ def delete(id):
             db.session.delete(user)
             db.session.commit()
             logout_user()
-            flash("Profile Deleted")
+            flash("Profile Deleted", "alert-warning")
             return redirect(url_for('root'))
         else:
-            print("Password incorrect")
-            flash("Password incorrect")
+            flash("Password incorrect", "alert-danger")
     # just in case they didn't actually delete
     form_login = UserLoginForm()
     return render_template('users/delete.html', id=id, form_login=form_login)
 
 @users_blueprint.route('/<int:id>', methods=['GET', 'PATCH', 'DELETE'])
 @login_required
-# @ensure_correct_user
 def show(id):
     user = User.query.get_or_404(id)
     # if authenticated let them view the user
@@ -102,7 +109,7 @@ def show(id):
         user.image_url = form.image_url.data
         db.session.add(user)
         db.session.commit()
-        flash("User Updated")
+        flash("Profile Updated", "alert-info")
         return redirect(url_for('users.show', id=id))
     # if they choose to delete their account, make them log in to confirm
     # if request.method == b"Delete":
