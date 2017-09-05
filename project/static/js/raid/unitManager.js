@@ -16,7 +16,7 @@ UnitManager.prototype.addEnemySpawners = function() {
                         name: 'Skeleton',
                         img: 'Skeleton_2.png',
                         imgUrl: `/static/img/raid/Skeleton_2.png`,
-                        walkSpd: 20
+                        walkSpd: 50
                       }];
 
   for (var i = 0; i < tempEnemyList.length; i++) {

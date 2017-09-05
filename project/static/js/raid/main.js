@@ -19,7 +19,7 @@ function main() {
   // Container for our monsters
   var battleGround = new Battleground(ctx, canvas.width, canvas.height, 4, 64);
   battleGround.spawnAllHeroes();
-  battleGround.initEnemySpawning(2000, 4000);
+  battleGround.initEnemySpawning(1000, 1000);
 
   var time = 0;
   var bLanes = battleGround.getBattleLanes();
@@ -42,11 +42,16 @@ function main() {
       }
     }
 
+    // Update all of the game entities
     battleGround.updateTimeStamp(time);
     battleGround.updateEnemies(ctx);
     battleGround.updateHeroes(ctx);
+
+    // Test if the enemies have stacked or all the heroes are dead.
+    //  refactor to also help with win checks
     if (battleGround.lossCheck()) {
       alert("Game over, man!");
+      clearInterval(gameInterval);
     }
 
   }, 33);  // Attempting ~30fps

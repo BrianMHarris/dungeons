@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # may need to run Genre.query for the genres...or add them manually
     # instead of through __init__. in that case remove from init
     Game.query.delete()
-    raid = Game("Raid!", "raid/raid.png", "")
+    raid = Game("Raid!", "raid", "raid/raid.png", "RPG meets strategy in this never-ending monster murder simulator!")
     raid.genres.extend([rpg, puzzle])
     db.session.add(raid)
     db.session.commit()

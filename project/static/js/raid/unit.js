@@ -3,6 +3,7 @@ function Unit(name, imageName, walkSpeed=0, pos_x=0, pos_y=0) {
   // this.urlImage = urlImage
   this.name = name;
   this.walkSpeed = walkSpeed;
+  this.collided = true;
   this.width = 16;
   this.height = 16;
   this.unitWidth = 64;
@@ -15,12 +16,20 @@ function Unit(name, imageName, walkSpeed=0, pos_x=0, pos_y=0) {
 
 // update animations and movement
 Unit.prototype.update = function(ctx, timeDelta, standStill=false) {
+    this.collided = standStill; // A bit of a hack for fail-case check in battleground::lossCheck
     this.avatar.renderAnim(ctx, this.pos_x, this.pos_y, timeDelta, standStill);
 
     // if this unit walks, scaled its speed by time past for smooth movement
     if (this.walkSpeed > 0 && standStill == false) {
       this.pos_y = this.pos_y + (this.walkSpeed / timeDelta);
     }
+}
+
+Unit.prototype.boundsCheck = function(laneHeight) {
+  if (this.pos_y > laneHeight + 2) // padding to give it a second to clear the board.
+    return true;
+
+  return false;
 }
 
 function Avatar(imageName, startFrame=0, startAnim=1, drawWidth, drawHeight) {

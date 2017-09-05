@@ -15,6 +15,8 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   this.enemySpawnNext = 0;
   this.timeSinceEnemySpawn = 0;
   this.lastLaneSpawned = 0;
+  this.enemiesOutOfBounds = 0;
+  this.enemyOOBoundsLimit = 10;
 
   this.laneHeight = height;
   this.laneMargin = (width - (numLanes * laneWidth)) / (numLanes + 1);
@@ -72,9 +74,16 @@ Battleground.prototype.updateEnemies = function(ctx) {
   var colliding = false;
   // loop through each enemy in each battle lane and update animations, etc
   for (var i = 0; i < this.battleLanes.length; i++) {
-    testUnit = null; // reset to null every battle lane
+     // TEST FOR OUT OF BOUNDS
+    if (this.battleLanes[i].enemies.length > 1 && this.battleLanes[i].enemies[0].boundsCheck(this.laneHeight)) {
+      this.battleLanes[i].enemies.shift(); // Bye Bye enemy
+      this.enemiesOutOfBounds++;
+    }
+
+    // reset whether it's colliding and keep checking
     colliding = false;
     for (var j = 0; j < this.battleLanes[i].enemies.length; j++) {
+      // TEST AGAINST OTHER UNITS
       // Either the unit ahead of us is an enemy or a hero.
       unitAhead = (j == 0)? this.battleLanes[i].hero : this.battleLanes[i].enemies[j-1];
 
@@ -95,11 +104,17 @@ Battleground.prototype.collisionCheck = function(testEnemy, unitAhead, timeDelta
   }
 }
 
-// Check if the user has lost via enemy stacking or all heroes dead
+// Check if the user has lost via enemy stacking or all heroes dead or too many enemies out of bounds
 Battleground.prototype.lossCheck = function() {
+  var maxEnemies = Math.floor(this.laneHeight / 64);
+  if (this.enemiesOutOfBounds > this.enemyOOBoundsLimit)
+    return true;
   for (var i = 0; i < this.battleLanes.length; i++) {
-    if (this.battleLanes[i].enemies.length >= this.laneHeight/64)
-      return true;
+
+    if (this.battleLanes[i].enemies.length >= maxEnemies)
+      // Check if the last enemy is standing still, which means they've made it to the line...
+      if (this.battleLanes[i].enemies[maxEnemies - 1].collided)
+        return true;
   }
 
   return false;
@@ -113,7 +128,7 @@ Battleground.prototype.spawnHeroToLane = function(laneNum) {
 }
 
 Battleground.prototype.spawnAllHeroes = function(laneNum) {
-  for (var i = 0; i < this.battleLanes.length; i++) {
+  for (var i = 0; i < this.battleLanes.length-2; i++) {
     this.spawnHeroToLane(i);
   }
 }
