@@ -1,0 +1,69 @@
+.game-container {
+  background-color: #AAB3AC;
+}
+
+.full-width {
+  width: 600px;
+}
+
+.full-height {
+  height: 640px;
+}
+
+.game-header {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-around;
+  background: #E4803A;
+  height: 48px;
+}
+
+.game-header-label {
+  text-align: center;
+  vertical-align: text-bottom;
+  padding-top: 5px;
+}
+
+#header_dungeonName {
+}
+
+#header_gold {
+  position: relative;
+  left: -15px;
+}
+
+.container_canvas {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.game-battlefield {
+  width: 580px;
+  height: 544px;
+}
+
+.game-canvas {
+  /*width: 580px;*/
+}
+
+.battlefield_margin_left_right {
+  background: #E4803A;
+  width: 10px;
+  height: 544px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background: #E4803A;
+  height: 48px;
+}
+
+.hero-info {
+  background: #6644FA;
+}
+

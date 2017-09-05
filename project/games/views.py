@@ -9,5 +9,9 @@ games_blueprint = Blueprint(
 
 @games_blueprint.route('/', methods=["GET"])
 def index():
-    from IPython import embed; embed()
     return render_template('games/index.html')
+
+@games_blueprint.route('/<title>', methods=["GET"])
+def show(title):
+    return render_template('games/{}.html'.format(title))
+

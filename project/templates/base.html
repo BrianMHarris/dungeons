@@ -15,13 +15,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   </head>
 <body>
   <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <!-- Title Row -->
     <div class="row title-bar">
-      <img src="https://i.ytimg.com/vi/nomNd-1zBl8/maxresdefault.jpg" alt="" width="64" height="64">
+      <img src="/static/img/EZ-Games.png" alt="">
     </div>
 
     <!-- Main Nav-Bar for entire site -->
@@ -35,7 +35,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Brand</a>
+          <!-- Just an image -->
+          <nav class="navbar navbar-light bg-faded">
+            <a class="navbar-brand" href="#">
+              <img src="/static/img/Skull.png" width="30" height="30" alt="">
+            </a>
+          </nav>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -43,7 +48,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Games</a></li>
+            <li><a href="{{ url_for('games.index') }}">Games</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -62,7 +67,7 @@
       </div><!-- /.container-fluid -->
     </nav>
     <div class="row content-container">
-      <div class="site-content col-xs-8 col-xs-offset-2">
+      <div class="site-content col-xs-10 col-xs-offset-1">
         <!-- all flash messages should be at the top of the content -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}

@@ -1,4 +1,4 @@
-function Unit(name, urlImage, walkSpeed=0, pos_x=0, pos_y=0) {
+function Unit(name, imageName, walkSpeed=0, pos_x=0, pos_y=0) {
   // this.ctx = ctx;
   // this.urlImage = urlImage
   this.name = name;
@@ -11,36 +11,37 @@ function Unit(name, urlImage, walkSpeed=0, pos_x=0, pos_y=0) {
   this.pos_x = pos_x;
   this.pos_y = pos_y;
   // start the animation at a random frame for variety
-  this.avatar = new Avatar(urlImage, Math.floor(Math.random() * 3), 1);
+  this.avatar = new Avatar(imageName, Math.floor(Math.random() * 3), 1);
 }
 
 // update animations and movement
 Unit.prototype.update = function(ctx, timeDelta) {
-  if (this.avatar.imgLoaded) {
+  //if (this.avatar.imgLoaded) {
     this.avatar.renderAnim(ctx, this.pos_x, this.pos_y, timeDelta);
     // if this unit walks, scaled its speed by time past for smooth movement
     if (this.walkSpeed > 0 && this.standStill == false) {
       this.pos_y = this.pos_y + (this.walkSpeed / timeDelta);
     }
-  }
+  //}
 }
 
 Unit.prototype.standStill = function(isStill) {
   this.standStill = isStill;
 }
 
-function Avatar(urlImage, startFrame=0, startAnim=1) {
-  this.urlImage = urlImage;
+function Avatar(imageName, startFrame=0, startAnim=1) {
   this.currentFrame = startFrame;
   this.currentAnim = startAnim;
   this.timeAccrued = 0;
   this.timePerFrame = 333;  // ~30 fps
 
-  this.image = new Image();
-  this.imgLoaded = false;
-  this.image.src = urlImage;
+  //this.urlImage = urlImage;
+  //this.imgName = imgName;
+  this.image = imageManager.instance().getImageByName(imageName);
+  //this.imgLoaded = false;
+  //this.image.src = urlImage;
   // let update function know when ready to animate
-  this.image.onload = this.imageLoaded.bind(this)
+  //this.image.onload = this.imageLoaded.bind(this)
 }
 
 // let the game know this avatar is ready to display

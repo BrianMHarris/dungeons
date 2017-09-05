@@ -11,11 +11,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.Text)
     image_url = db.Column(db.Text)
 
-    def __init__(self, email, username, password):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(password).decode('UTF-8')
 
+# join table for Games and Genres
 GameGenre = db.Table('game_genres',
                     db.Column('id',
                             db.Integer,
@@ -33,13 +34,23 @@ class Game(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, unique=True)
     image_url = db.Column(db.Text)
-    genre = db.relationship("Genre",
+    genres = db.relationship("Genre",
                             secondary=GameGenre,
                             backref=db.backref('games'))
     description = db.Column(db.Text)
+
+    # image_url requires the sub-folder inside static/img
+    # will have to set genres separately
+    def __init__(self, title, image_url, description):
+        self.title = title
+        self.image_url = image_url
+        self.description = description
 
 class Genre(db.Model):
     __tablename__ = 'genres'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, unique=True)
+
+    def __init__(self, name):
+        self.name = name

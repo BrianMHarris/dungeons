@@ -1,52 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Dungeons!</title>
-  <script src="jquery-3.2.1.js"></script>
-  <link rel="stylesheet" type="text/css" href="game.css">
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <div id="header_title" class="header_label">Raid Dungeon:</div>
-      <div id="header_dungeonName" class="header_label">
-        "name of dungeon"
-      </div>
-      <div id="header_gold" class="header_label">
-        Gold
-      </div>
+{% extends 'base.html' %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/raid/game.css') }}">
+
+  <!-- rebuilding game with Bootstrap in mind -->
+ <!--  <div class = "row game-container">
+    <div class="game-title">
+      <span class=""><h2>RAID!</h2></span>
+      <span class=""><h3>Gold: 0</h3></span>
     </div>
     <div class="container_canvas">
       <div class="margin_left"></div>
       <canvas id="canvas">
-        <p>Your browser does not support Canvas</p>
+          <p>Your browser does not support Canvas</p>
       </canvas>
       <div class="margin_right"></div>
     </div>
-    <div class="footer">
-      <div id="heroInfo_1" class="heroInfo">
+  </div>
+
+
+
+
+  <script src="{{ url_for('static', filename='js/raid/globals.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/unitManager.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/unit.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/battleground.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/main.js') }}"></script> -->
+
+  <div class="game-container full-width full-height">
+    <div class="game-header full-width">
+      <div id="raid_title" class="game-header-label">
+        <h4>Raid!</h4>
+      </div>
+      <div id="header_dungeonName" class="game-header-label">
+        <h4>"name of dungeon"</h4>
+      </div>
+      <div id="header_gold" class="game-header-label">
+        <h4>Gold</h4>
+      </div>
+    </div>
+    <div class="container_canvas full-width">
+      <div class="battlefield_margin_left_right"></div>
+      <div class="game-battlefield"> <!-- this keeps the canvas smaller than the container_canvas -->
+        <canvas id="canvas" class="game-canvas">
+            <p>Your browser does not support Canvas</p>
+        </canvas>
+      </div>
+      <div class="battlefield_margin_left_right"></div>
+    </div>
+    <div class="footer full-width">
+      <div id="heroInfo_1" class="hero-info">
         Hero 1 Info
       </div>
-      <div id="heroInfo_2" class="heroInfo">
+      <div id="heroInfo_2" class="hero-info">
         Hero 2 Info
       </div>
-      <div id="heroInfo_3" class="heroInfo">
+      <div id="heroInfo_3" class="hero-info">
         Hero 3 Info
       </div>
-      <div id="heroInfo_4" class="heroInfo">
+      <div id="heroInfo_4" class="hero-info">
         Hero 4 Info
       </div>
-      <div id="heroInfo_5" class="heroInfo">
+      <div id="heroInfo_5" class="hero-info">
         Hero 5 Info
       </div>
     </div>
   </div>
   <!-- requires a simple server for testing -->
-  <script src="globals.js"></script>
-  <script src="unitManager.js"></script>
-  <script src="unit.js"></script>
-  <script src="battleground.js"></script>
-  <script src="main.js"></script>
-</body>
-</html>
+  <script src="{{ url_for('static', filename='js/raid/imageManager.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/globals.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/unitManager.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/unit.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/battleground.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/main.js') }}"></script>
+{% endblock %}

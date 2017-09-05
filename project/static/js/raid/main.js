@@ -14,7 +14,7 @@ function main() {
 
   var ctx = canvas.getContext('2d');
   ctx.fillStyle = "#5F9553";
-  ctx.fillRect(0,0,480,544);
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
   // Container for our monsters
   var battleGround = new Battleground(ctx, canvas.width, canvas.height, 5, 64);
@@ -31,6 +31,8 @@ function main() {
     //  Clear the Canvas Rect
     //  Draw all enemies
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#5F9553";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
 
     // DEBUG: Draw Battle Lanes
     if (globals.getDebugMode()){
