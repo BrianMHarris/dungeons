@@ -37,31 +37,35 @@
           </button>
           <!-- Just an image -->
           <nav class="navbar navbar-light bg-faded">
-            <a class="navbar-brand" href="#">
-              <img src="/static/img/Skull.png" width="30" height="30" alt="">
-            </a>
+            <img src="/static/img/Skull.png" width="48" height="48" alt="">
           </nav>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
             <li><a href="#">About</a></li>
             <li><a href="{{ url_for('games.index') }}">Games</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <!-- If the user is logged in, let them access their account -->
-            <li id="link-user class="">
-              <a href="{{ url_for('users.index') }}">
-                {% if current_user.is_authenticated %}
-                  My Account
-                {% else %}
-                  Sign Up/Login
-                {% endif %}
-              </a>
-            </li>
+            {% if current_user.is_authenticated %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Edit Profile</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                </ul>
+              </li>
+            {% else %}
+              <li id="link-user class="">
+                <a href="{{ url_for('users.index') }}">
+                  Log In / Sign Up
+                </a>
+              </li>
+            {% endif %}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

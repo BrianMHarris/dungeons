@@ -17,7 +17,7 @@ function main() {
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   // Container for our monsters
-  var battleGround = new Battleground(ctx, canvas.width, canvas.height, 5, 64);
+  var battleGround = new Battleground(ctx, canvas.width, canvas.height, 4, 64);
   battleGround.spawnAllHeroes();
   battleGround.initEnemySpawning(2000, 4000);
 
@@ -45,7 +45,9 @@ function main() {
     battleGround.updateTimeStamp(time);
     battleGround.updateEnemies(ctx);
     battleGround.updateHeroes(ctx);
-    //skeleton.update(ctx, 0,0, time);
+    if (battleGround.lossCheck()) {
+      alert("Game over, man!");
+    }
 
   }, 33);  // Attempting ~30fps
 }

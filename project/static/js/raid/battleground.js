@@ -2,7 +2,6 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   this.ctx = ctx;
   this.numLanes = numLanes;
   this.battleLanes = [];  // container for multiple lanes, which will handle spawning enemies
-  this.heroLanding = [];  // container for multiple heroes, at bottom of lanes
   this.unitManager = new UnitManager();
   this.unitManager.addEnemySpawners();
   this.unitManager.addHeroSpawners();
@@ -17,6 +16,7 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   this.timeSinceEnemySpawn = 0;
   this.lastLaneSpawned = 0;
 
+  this.laneHeight = height;
   this.laneMargin = (width - (numLanes * laneWidth)) / (numLanes + 1);
 
   // create all lanes with the appropriate x and width so they are spread evenly
@@ -68,32 +68,47 @@ Battleground.prototype.updateEnemies = function(ctx) {
     this.enemySpawnNext = Math.floor(Math.random() * this.enemySpawnHigh) + this.enemySpawnLow;
   }
 
-  var testUnit = null;
+  var unitAhead = null;
+  var colliding = false;
   // loop through each enemy in each battle lane and update animations, etc
   for (var i = 0; i < this.battleLanes.length; i++) {
+    testUnit = null; // reset to null every battle lane
+    colliding = false;
     for (var j = 0; j < this.battleLanes[i].enemies.length; j++) {
       // Either the unit ahead of us is an enemy or a hero.
-      // testUnit =
-
+      unitAhead = (j == 0)? this.battleLanes[i].hero : this.battleLanes[i].enemies[j-1];
 
       //this.collisionCheck(this.battleLanes[i].enemies[j], this.battleLanes[i].enemies[j] - 1)
-      this.battleLanes[i].enemies[j].update(ctx, this.timeDelta);
+      this.battleLanes[i].enemies[j].update(ctx, this.timeDelta,
+                        this.collisionCheck(this.battleLanes[i].enemies[j], unitAhead, this.timeDelta));
     }
   }
 }
 
-Battleground.prototype.collisionCheck = function(testEnemy, unitAhead) {
-  if (unitAhead && testEnemy.y + testEnemy.unitHeight >= unitAhead.y) {
+Battleground.prototype.collisionCheck = function(testEnemy, unitAhead, timeDelta) {
+  if (unitAhead && testEnemy.pos_y + testEnemy.unitHeight + (testEnemy.walkSpeed / timeDelta) >= unitAhead.pos_y) {
     // NEED: getter, setter functions for this
-    testEnemy.y = unitAhead.y - testEnemy.unitHeight;
-    testEnemy.standStill(true);
+    testEnemy.pos_y = unitAhead.pos_y - testEnemy.unitHeight;
+    return true;
+  } else {
+    return false;
   }
+}
+
+// Check if the user has lost via enemy stacking or all heroes dead
+Battleground.prototype.lossCheck = function() {
+  for (var i = 0; i < this.battleLanes.length; i++) {
+    if (this.battleLanes[i].enemies.length >= this.laneHeight/64)
+      return true;
+  }
+
+  return false;
 }
 
 Battleground.prototype.spawnHeroToLane = function(laneNum) {
   var hero = this.unitManager.heroManager.spawnHero(0,
                                           this.battleLanes[laneNum].x,
-                                          this.battleLanes[laneNum].height - 72)
+                                          this.battleLanes[laneNum].height-72)
   this.battleLanes[laneNum].hero = hero;
 }
 

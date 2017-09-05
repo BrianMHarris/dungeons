@@ -59,13 +59,11 @@ def login():
     # not a full page reload, use default values for anything not covered in the form!
     pass
 
-@users_blueprint.route('/<int:id>/logout')
-@login_required
-@ensure_correct_user
-def logout(id):
+@users_blueprint.route('/logout')
+def logout():
     logout_user();
     flash("Logged Out", "alert-info")
-    return redirect(url_for('root'))
+    return redirect(url_for('root'), code=302)
 
 @users_blueprint.route('/<int:id>/edit')
 @login_required
