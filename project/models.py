@@ -33,6 +33,7 @@ class Game(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, unique=True)
+    author = db.Column(db.Text)
     resource_path = db.Column(db.Text, unique=True)
     image_url = db.Column(db.Text)
     genres = db.relationship("Genre",
@@ -42,8 +43,9 @@ class Game(db.Model):
 
     # image_url requires the sub-folder inside static/img
     # will have to set genres separately
-    def __init__(self, title, resource_path, image_url, description):
+    def __init__(self, title, author, resource_path, image_url, description):
         self.title = title
+        self.author = author
         self.resource_path = resource_path
         self.image_url = image_url
         self.description = description

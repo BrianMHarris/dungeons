@@ -19,13 +19,8 @@
   </head>
 <body>
   <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <!-- Title Row -->
-    <div class="row title-bar">
-      <img src="/static/img/EZ-Games.png" alt="">
-    </div>
-
     <!-- Main Nav-Bar for entire site -->
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -48,7 +43,7 @@
           <li><a href="{{ url_for('games.index') }}">Games</a></li>
           <li><a href="#">Contact</a></li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" style="padding-right: 10px">
           {% if current_user.is_authenticated %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
@@ -61,13 +56,18 @@
           {% else %}
             <li id="link-user class="">
               <a href="{{ url_for('users.index') }}">
-                Log In / Sign Up
+                Log In | Sign Up
               </a>
             </li>
           {% endif %}
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
+    <!-- Title Row -->
+    <div class="row title-bar" style="margin-top: 50px">
+      <img src="/static/img/EZ-Games.png" alt="">
+    </div>
+    <!-- content of the site pages -->
     <div class="row content-container">
       <div class="site-content col-xs-10 col-xs-offset-1">
         <!-- all flash messages should be at the top of the content -->

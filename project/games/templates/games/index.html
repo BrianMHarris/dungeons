@@ -1,6 +1,41 @@
 {% extends 'base.html' %}
 {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/games/styles.css') }}">
 
+<div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="row">
+    <div class="game-list-title">
+      <h1>Choose Your Poison</h1>
+    </div>
+  </div>
+  {% for game in games_list.items %}
+  <p>
+    {% if game.resource_path %}
+      <div class="row col-xs-10 col-xs-offset-1">
+        <div class="col-xs-2">
+          <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">
+            <img class="img-circle img-responsive" width=128 height=128 src="{{ url_for('static', filename='img/' + game.resource_path + '/' + game.image_url) }}" alt="<No image found>">
+          </a>
+        </div>
+        <div class="game-entry-top-line row col-xs-8">
+            <div class="col-xs-3">
+              <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">{{ game.title }}</a>
+            </div>
+            <div class="game-entry-author col-xs-8">
+              by: {{ game.author }}
+            </div>
+        </div>
+        <div class="row col-xs-8">
+          <div class="game-entry-desc">
+            {{ game.description }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </p>
+  {% endfor %}
+</div>
 
+<!-- must handle not having any games in the list? -->
 
 {% endblock %}
