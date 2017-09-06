@@ -1,13 +1,41 @@
+body {
+  padding-top: 50px;
+}
+
 .title-bar {
   background-color: black;
+}
+
+.title_center {
   text-align: center;
 }
-.nav-container {
-  background-color: white;
-}
+
 .navbar {
-  background-color: white;
+  background: #404141;
   border-width: 0;
   box-shadow: none;
   margin-bottom: 0;
+}
+
+.navbar-default .navbar-nav>li>a {
+ color : #E1DFD9;
+}
+
+.content-container {
+  background-color: #404141;
+}
+.content-column {
+  background-color: white;
+  min-height: 90vh;
+}
+
+.footer-divider {
+  background-color: #FFD61F;
+  height: 5px;
+}
+
+.footer-container {
+  background-color: black;
+  color:white;
+  min-height: 50px;
 }

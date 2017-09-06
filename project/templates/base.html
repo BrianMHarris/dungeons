@@ -18,105 +18,128 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
   </head>
 <body>
-  <div class="container col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <!-- Main Nav-Bar for entire site -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <!-- Just an image -->
-        <a class="navbar navbar-light bg-faded">
-          <img src="/static/img/Skull.png" width="48" height="48" alt="">
-        </a>
-      </div>
+  <div class="container-fluid">
+    <!-- row for the entire navbar -->
+    <div class="row col-xs-12">
+      <!-- Main Nav-Bar for entire site -->
+      <nav class="navbar navbar-default navbar-fixed-top">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="col-xs-8 col-xs-offset-2">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <!-- Just an image -->
+            <a class="navbar navbar-light bg-faded">
+              <img src="/static/img/Skull.png" width="48" height="48" alt="">
+            </a>
+          </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class=""><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="{{ url_for('games.index') }}">Games</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right" style="padding-right: 10px">
-          {% if current_user.is_authenticated %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Edit Profile</a></li>
-                <li class="divider"></li>
-                <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
-              </ul>
-            </li>
-          {% else %}
-            <li id="link-user class="">
-              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <div>
-                  <form method="POST" action="{{ url_for('users.login') }}">
-                    {{ g.login_form.csrf_token }}
-                    {% for field in g.login_form if field.widget.input_type != 'hidden'%}
-                      <p>
-                      {{ field.label }}
-                      {{ field }}
-                      <span>
-                        {% if field.errors %}
-                          {% for error in field.errors %}
-                            {{ error }}
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="">
+                <ul class="nav navbar-nav">
+                  <li class=""><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
+                  <li><a class="navbar-link" href="#">About</a></li>
+                  <li><a href="{{ url_for('games.index') }}">Games</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="">
+              <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Edit Profile</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                    </ul>
+                  </li>
+                {% else %}
+                  <li id="link-user class="">
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <div>
+                        <form method="POST" action="{{ url_for('users.login') }}">
+                          {{ g.login_form.csrf_token }}
+                          {% for field in g.login_form if field.widget.input_type != 'hidden'%}
+                            <p>
+                            {{ field.label }}
+                            {{ field }}
+                            <span>
+                              {% if field.errors %}
+                                {% for error in field.errors %}
+                                  {{ error }}
+                                {% endfor %}
+                              {% endif %}
+                            </span>
+                          </p>
                           {% endfor %}
-                        {% endif %}
-                      </span>
-                    </p>
-                    {% endfor %}
-                    <button type="submit">Login</button>
-                  </form>
-                </div>
-                <li class="divider"></li>
-                <div class="user_signup">
-                  No profile yet?
-                  <a href="{{ url_for('users.index') }}">
-                    Sign Up
-                  </a> now!<br>It's free, easy, and <strong>almost</strong> painless!
-                </div>
-                <!-- <li><a href="#">Edit Profile</a></li>
-                <li class="divider"></li>
-                <li><a href="{{ url_for('users.logout') }}">Logout</a></li> -->
+                          <button type="submit">Login</button>
+                        </form>
+                      </div>
+                      <li class="divider"></li>
+                      <div class="user_signup">
+                        No profile yet?
+                        <a href="{{ url_for('users.index') }}">
+                          Sign Up
+                        </a> now!<br>It's free, easy, and <strong>mostly</strong> painless!
+                      </div>
+                    </ul>
+                  </li>
+                  </li>
+                {% endif %}
               </ul>
-            </li>
-            </li>
-          {% endif %}
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </nav>
-    <!-- Title Row -->
-    <div class="row title-bar" style="margin-top: 50px">
-      <img src="/static/img/EZ-Games.png" alt="">
+            </div>
+          </div><!-- /.navbar-collapse -->
+        </div> <!-- div for navbar elements -->
+      </nav>
+    </div> <!-- row for the entire navbar -->
+    <!-- title row -->
+    <div class="row title-bar">
+      <div class="title_center col-xs-offset-2 col-xs-8">
+        <img src="/static/img/EZ-Games.png" alt="">
+      </div>
     </div>
+
+    <div class="row divider footer-divider">
+
+    </div>
+
     <!-- content of the site pages -->
     <div class="row content-container">
-      <!-- all flash messages should be at the top of the content -->
-      {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert {{ category }}" role="alert">
-                <strong>{{ message }}</strong>
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-      <div class="site-content col-xs-10 col-xs-offset-1">
-        <!-- main content from .html files extending base -->
-        {% block content %}
+      <div class="content-column col-xs-8 col-xs-offset-2">
+        <!-- all flash messages should be at the top of the content -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert {{ category }}" role="alert">
+                  <strong>{{ message }}</strong>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+        <div class="site-content">
+          <!-- main content from .html files extending base -->
+          {% block content %}
 
-        {% endblock %}
+          {% endblock %}
+        </div>
       </div>
     </div> <!-- content container -->
-  </div> <!-- main container -->
-</body>
+    <!-- footer -->
+    <div class="row divider footer-divider">
+
+    </div>
+    <div class="row footer-container">
+      <div class="col-xs-8 col-xs-offset-2">
+        I'm a footer!
+      </div>
+    </div>
+  </body>
 </html>
