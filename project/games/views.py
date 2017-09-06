@@ -14,9 +14,11 @@ def index():
 @games_blueprint.route('/view/<int:page>', methods=["GET"])
 def view(page):
     limit_per_page = 10
-    games_list = Game.query.paginate(1 + page * limit_per_page - limit_per_page,
+    games_list = Game.query.paginate(page,
                                 limit_per_page, False)
-    return render_template('games/index.html', games_list=games_list)
+    start = (page - 1) * limit_per_page + 1
+    end = start + len(games_list.items) - 1
+    return render_template('games/index.html', page=page, games_list=games_list, start=start, end=end)
 
 @games_blueprint.route('/<title>', methods=["GET"])
 def show(title):

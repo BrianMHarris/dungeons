@@ -52,18 +52,28 @@ def signup():
         flash("Invalid form", "alert-danger")
     return redirect(url_for('users.index'))
 
-@users_blueprint.route('/login')
+@users_blueprint.route('/login', methods=["POST"])
 def login():
     # arrive here from the signup login modal based on which button you choose
     # if just signed up we want to definitely log in!
     # not a full page reload, use default values for anything not covered in the form!
-    pass
+    form = UserLoginForm(request.form)
+    if form.validate():
+        found_user = User.query.filter_by(username=form.data['username']).first()
+        if found_user:
+            authenticated_user = bcrypt.check_password_hash(found_user.password, form.data['password'])
+            if authenticated_user:
+                flash("Login successful!", "alert-success")
+                login_user(remember_me=True)
+    if form.is_submitted():
+        flash("Username and Password do not match our records. Pleast Try again.", "alert-warning")
+    return redirect(url_for('home.index'))
 
 @users_blueprint.route('/logout')
 def logout():
     logout_user();
     flash("Logged Out", "alert-info")
-    return redirect(url_for('root'), code=302)
+    return redirect(url_for('home.index'), code=302)
 
 @users_blueprint.route('/<int:id>/edit')
 @login_required

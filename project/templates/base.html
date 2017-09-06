@@ -55,9 +55,40 @@
             </li>
           {% else %}
             <li id="link-user class="">
-              <a href="{{ url_for('users.index') }}">
-                Log In | Sign Up
-              </a>
+              <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <div>
+                  <form method="POST" action="{{ url_for('users.login') }}">
+                    {{ g.login_form.csrf_token }}
+                    {% for field in g.login_form if field.widget.input_type != 'hidden'%}
+                      <p>
+                      {{ field.label }}
+                      {{ field }}
+                      <span>
+                        {% if field.errors %}
+                          {% for error in field.errors %}
+                            {{ error }}
+                          {% endfor %}
+                        {% endif %}
+                      </span>
+                    </p>
+                    {% endfor %}
+                    <button type="submit">Login</button>
+                  </form>
+                </div>
+                <li class="divider"></li>
+                <div class="user_signup">
+                  No profile yet?
+                  <a href="{{ url_for('users.index') }}">
+                    Sign Up
+                  </a> now!<br>It's free, easy, and <strong>almost</strong> painless!
+                </div>
+                <!-- <li><a href="#">Edit Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="{{ url_for('users.logout') }}">Logout</a></li> -->
+              </ul>
+            </li>
             </li>
           {% endif %}
         </ul>
@@ -69,9 +100,8 @@
     </div>
     <!-- content of the site pages -->
     <div class="row content-container">
-      <div class="site-content col-xs-10 col-xs-offset-1">
-        <!-- all flash messages should be at the top of the content -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
+      <!-- all flash messages should be at the top of the content -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
               <div class="alert {{ category }}" role="alert">
@@ -80,7 +110,7 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
-
+      <div class="site-content col-xs-10 col-xs-offset-1">
         <!-- main content from .html files extending base -->
         {% block content %}
 

@@ -40,15 +40,18 @@ class Game(db.Model):
                             secondary=GameGenre,
                             backref=db.backref('games'))
     description = db.Column(db.Text)
+    submission_date = db.Column(db.Text)
 
     # image_url requires the sub-folder inside static/img
     # will have to set genres separately
-    def __init__(self, title, author, resource_path, image_url, description):
+    def __init__(self, title, author, resource_path,
+                    image_url, description, submission_date):
         self.title = title
         self.author = author
         self.resource_path = resource_path
         self.image_url = image_url
         self.description = description
+        self.submission_date = submission_date
 
 class Genre(db.Model):
     __tablename__ = 'genres'
