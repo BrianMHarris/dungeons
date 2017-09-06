@@ -3,15 +3,24 @@
 from project.models import User, Game, Genre
 from project import db
 
-if __name__ == "__main__":
-    """ SEED initial data for the databases """
-
+# wipes all data
+def seed_none():
     # Users
     User.query.delete()
-    user = User("Brian", "dood@gmang.com", "1234")
+    # GENRES
+    Genre.query.delete()
+    # GAMES
+    Game.query.delete()
+    db.session.commit();
+    print("seed_none: Complete")
+
+def seed_all():
+    # Users
+    User.query.delete()
+    user = User("ExplodedZombie", "brianharrisdesign@gmail.com", "P@nd@$")
     db.session.add(user)
     db.session.commit()
-    print("SEED: Users")
+    print("seed_all: Users")
 
     # GENRES
     Genre.query.delete()
@@ -20,11 +29,12 @@ if __name__ == "__main__":
     db.session.add(rpg)
     db.session.add(puzzle)
     db.session.commit()
-    print("SEED: Genres")
+    print("seed_all: Genres")
 
     # GAMES
     # may need to run Genre.query for the genres...or add them manually
     # instead of through __init__. in that case remove from init
+    # extend adds references to the join table which in turn adds the model to the db session
     Game.query.delete()
     raid = Game("Raid!", "ExplodedZombie", "raid", "raid.png", "RPG meets strategy in this never-ending monster murder simulator!", "2017-09-06")
     raid.genres.extend([rpg, puzzle])
@@ -48,6 +58,35 @@ if __name__ == "__main__":
     game10.genres.extend([rpg, puzzle])
     game11 = Game("Game 11", "ExplodedZombie", "10", "", "Game 11", "2017-09-06")
     game11.genres.extend([rpg, puzzle])
+    db.session.commit()
+    print("seed_all: Games")
+
+def seed_final():
+    User.query.delete()
+    user = User("ExplodedZombie", "brianharrisdesign@gmail.com", "P@nd@$")
+    db.session.add(user)
+    db.session.commit()
+    print("seed_all: Users")
+
+    # GENRES
+    Genre.query.delete()
+    rpg = Genre("RPG")
+    puzzle = Genre("Puzzle")
+    db.session.add(rpg)
+    db.session.add(puzzle)
+    db.session.commit()
+    print("seed_all: Genres")
+
+    Game.query.delete()
+    raid = Game("Raid!", "ExplodedZombie", "raid", "raid.png", "RPG meets strategy in this never-ending monster murder simulator!", "2017-09-06")
+    raid.genres.extend([rpg, puzzle])
     db.session.add(raid)
     db.session.commit()
-    print("SEED: Games")
+
+
+if __name__ == "__main__":
+    """ SEED initial data for the databases """
+    seed_final()
+
+
+
