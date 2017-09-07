@@ -1,17 +1,29 @@
-function Unit(name, imageName, walkSpeed=0, pos_x=0, pos_y=0) {
+function Unit(name, jobClass, imageName, pos_x=0, pos_y=0) {
   // this.ctx = ctx;
   // this.urlImage = urlImage
   this.name = name;
-  this.walkSpeed = walkSpeed;
+  this.expLevel = 1;
+  this.currentExp = 0;
+  this.attackTimeAccrued = 0;
+
+  // put this into an object
+  this.jobName = jobClass.jobName;
+  this.hitpoints = jobClass.hitpoints;
+  this.element = jobClass.element;
+  this.attack = jobClass.attack;
+  this.defense = jobClass.defense;
+  this.attackSpd = jobClass.attackSpd;
+  this.walkSpeed =jobClass.walkSpeed;
   this.collided = true;
-  this.width = 16;
-  this.height = 16;
-  this.unitWidth = 64;
-  this.unitHeight = 64;
+
+  // drawing-related variables
+  this.scaleWidth = 64;
+  this.scaleHeight = 64;
   this.pos_x = pos_x;
   this.pos_y = pos_y;
+
   // start the animation at a random frame for variety
-  this.avatar = new Avatar(imageName, Math.floor(Math.random() * 3), 1, this.unitWidth, this.unitHeight);
+  this.avatar = new Avatar(imageName, Math.floor(Math.random() * 3), 1, this.scaleWidth, this.scaleHeight);
 }
 
 // update animations and movement
@@ -23,6 +35,25 @@ Unit.prototype.update = function(ctx, timeDelta, standStill=false) {
     if (this.walkSpeed > 0 && standStill == false) {
       this.pos_y = this.pos_y + (this.walkSpeed / timeDelta);
     }
+}
+
+// determines the correct frame of animation and speed
+Unit.prototype.attackUnit = function(target, timeDelta) {
+  this.attackTimeAccrued += timeDelta;
+  console.log(`${this.name} attacking ${target.name}`)
+  // 250 is like 0 atk speed (make a global?!)
+  if (target.hitpoints > 0 && this.attackTimeAccrued > 1000 * (this.attackSpd / 100) + 250) {
+    target.takeDamage(this.attack);
+    this.attackTimeAccrued = 0;
+  }
+}
+
+Unit.prototype.takeDamage = function(enemyAttack) {
+  var defMod = enemyAttack / this.defense
+  var finalMod = (Math.abs(defMod) < 1)? defMod : 1;
+
+  this.hitpoints = this.hitpoints - (enemyAttack * finalMod);
+  this.hitpoints = (this.hitpoints <= 0)? 0 : this.hitpoints;
 }
 
 Unit.prototype.boundsCheck = function(laneHeight) {

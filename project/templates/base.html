@@ -52,25 +52,23 @@
               <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Edit Profile</a></li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.username }}<b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-user">
+                      <li><a href="#"><span class="glyphicon glyphicon-edit"></span> Edit Profile </a></li>
                       <li class="divider"></li>
-                      <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
+                      <li><a href="{{ url_for('users.logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
                     </ul>
                   </li>
                 {% else %}
                   <li id="link-user class="">
                     <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <div>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <b class="caret"></b></a>
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-login">
+                      <div class="form-entry">
                         <form method="POST" action="{{ url_for('users.login') }}">
                           {{ g.login_form.csrf_token }}
                           {% for field in g.login_form if field.widget.input_type != 'hidden'%}
-                            <p>
-                            {{ field.label }}
-                            {{ field }}
+                            {{ field.label }}  {{ field }}
                             <span>
                               {% if field.errors %}
                                 {% for error in field.errors %}
@@ -78,9 +76,10 @@
                                 {% endfor %}
                               {% endif %}
                             </span>
-                          </p>
                           {% endfor %}
-                          <button type="submit">Login</button>
+                          <button type="submit">
+                            Login
+                          </button>
                         </form>
                       </div>
                       <li class="divider"></li>
@@ -101,16 +100,12 @@
       </nav>
     </div> <!-- row for the entire navbar -->
     <!-- title row -->
-    <div class="row title-bar">
+    <div class="row title-bar fixed-top">
       <div class="title_center col-xs-offset-2 col-xs-8">
         <img src="/static/img/EZ-Games.png" alt="">
       </div>
     </div>
-
-    <div class="row divider footer-divider">
-
-    </div>
-
+    <div class="row divider footer-divider"></div>
     <!-- content of the site pages -->
     <div class="row content-container">
       <div class="content-column col-xs-8 col-xs-offset-2">
@@ -133,9 +128,7 @@
       </div>
     </div> <!-- content container -->
     <!-- footer -->
-    <div class="row divider footer-divider">
-
-    </div>
+    <div class="row divider footer-divider"></div>
     <div class="row footer-container">
       <div class="col-xs-8 col-xs-offset-2">
         I'm a footer!

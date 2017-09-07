@@ -64,8 +64,8 @@ def login():
             authenticated_user = bcrypt.check_password_hash(found_user.password, form.data['password'])
             if authenticated_user:
                 flash("Login successful!", "alert-success")
-                login_user(remember_me=True)
-    if form.is_submitted():
+                login_user(found_user)
+    elif form.is_submitted():
         flash("Username and Password do not match our records. Pleast Try again.", "alert-warning")
     return redirect(url_for('home.index'))
 

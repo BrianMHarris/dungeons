@@ -20,18 +20,20 @@
               <div class="media-body">
                 <!-- <h2 class="media-heading"> -->
                 <div>
-                  <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">
-                    {{ game.title }}
-                  </a>
-                  {% if game.genres %}
-                    {% for genre in game.genres %}
-                      <span class="game-entry-genre">
-                        <span class="label label-default">
-                          {{ genre.name }}
+                  <h4>
+                    <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">
+                      {{ game.title }}
+                    </a>
+                    {% if game.genres %}
+                      {% for genre in game.genres %}
+                        <span class="game-entry-genre">
+                          <span class="label label-primary">
+                            {{ genre.name }}
+                          </span>
                         </span>
-                      </span>
-                    {% endfor %}
-                  {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  </h4>
                 </div>
                 <div class="game-entry-desc">
                   {{ game.description }}
@@ -40,8 +42,8 @@
                   <div class="game-entry-author col-xs-7">
                     by: {{ game.author }}
                   </div>
-                  <div class="game-entry-date col-xs-3 col-xs-offset-2">
-                    Submission Date: {{ game.submission_date}}
+                  <div class="game-entry-date col-xs-4 col-xs-offset-1">
+                    Date: {{ game.submission_date}}
                   </div>
                 </div>
               </div> <!-- end media body -->
@@ -53,7 +55,7 @@
   {% endfor %}
   <div class="row col-xs-10 col-xs-offset-1">
     {% if games_list.has_prev %}
-      <div class="col-xs-1 col-xs-offset-3">
+      <div class="col-xs-2 col-xs-offset-2">
         <form action="{{ url_for('games.view', page=page-1) }}">
           <button type="submit">
             <span class="glyphicon glyphicon-chevron-left">PREV</span>
@@ -61,16 +63,16 @@
         </form>
       </div>
     {% else %}
-    <div class="col-xs-1 col-xs-offset-3">
-    </div>
+      <div class="col-xs-2 col-xs-offset-3">
+      </div>
     {% endif %}
     <div class="col-xs-2 game-entry-viewing">
-      {{ start }} through {{ end }}
+      {{ start }} - {{ end }}
     </div>
     {% if games_list.has_next %}
-      <div class="col-xs-1">
+      <div class="col-xs-2">
         <form action="{{ url_for('games.view', page=page+1) }}">
-          <button type="submit">
+          <button class="btn-nav" type="submit">
             <span class="glyphicon glyphicon-chevron-right">NEXT</span>
           </button>
         </form>

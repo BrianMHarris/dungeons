@@ -1,9 +1,19 @@
 body {
   padding-top: 50px;
+  background-image: -webkit-linear-gradient(top, #808080 0%, #4C4C4C 100%);
+  background-image: -moz-linear-gradient(top, #808080 0%, #4C4C4C 100%);
+  background-image: -ms-linear-gradient(top, #808080 0%, #4C4C4C 100%);
+  background-image: -o-linear-gradient(top, #808080 0%, #4C4C4C 100%);
+  background-image: linear-gradient(top, #808080 0%, #4C4C4C 100%);
 }
 
 .title-bar {
-  background-color: black;
+  /*background-color: black;*/
+  background-image: url("/static/img/dark_matter.png");
+  background-repeat: repeat;
+  /*position: fixed;
+  top: 0;
+  width: 100%;*/
 }
 
 .title_center {
@@ -19,23 +29,45 @@ body {
 
 .navbar-default .navbar-nav>li>a {
  color : #E1DFD9;
+ font-family: verdana;
+ font-size: 16px;
 }
 
+/*GRADIENT*/
 .content-container {
-  background-color: #404141;
+  padding-bottom: 15px;
 }
 .content-column {
-  background-color: white;
+  /*background-color: white;*/
   min-height: 90vh;
 }
 
+.dropdown-login {
+  width: 250px;
+  text-align: right;
+}
+
+.form-entry {
+  text-align: right;
+  margin-right: 10px;
+}
+
+.user_signup {
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .footer-divider {
-  background-color: #FFD61F;
-  height: 5px;
+  background-color: #DEC26C;
+  height: 2px;
 }
 
 .footer-container {
-  background-color: black;
+  /*background-color: black;*/
+  background-image: url("/static/img/dark_matter.png");
+  background-repeat: repeat;
   color:white;
   min-height: 50px;
 }

@@ -10,8 +10,8 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
 
   // enemy-spawn-related variables
   this.enemyStart = -72;
-  this.enemySpawnLow = 0;
-  this.enemySpawnHigh = 0;
+  this.enemySpawnLow = 1000; // the low time between next enemy spawn
+  this.enemySpawnHigh = 1000; // the high time between next enemy spawn
   this.enemySpawnNext = 0;
   this.timeSinceEnemySpawn = 0;
   this.lastLaneSpawned = 0;
@@ -81,23 +81,30 @@ Battleground.prototype.updateEnemies = function(ctx) {
     }
 
     // reset whether it's colliding and keep checking
-    colliding = false;
+    isColliding = false;
     for (var j = 0; j < this.battleLanes[i].enemies.length; j++) {
       // TEST AGAINST OTHER UNITS
       // Either the unit ahead of us is an enemy or a hero.
       unitAhead = (j == 0)? this.battleLanes[i].hero : this.battleLanes[i].enemies[j-1];
 
-      //this.collisionCheck(this.battleLanes[i].enemies[j], this.battleLanes[i].enemies[j] - 1)
-      this.battleLanes[i].enemies[j].update(ctx, this.timeDelta,
-                        this.collisionCheck(this.battleLanes[i].enemies[j], unitAhead, this.timeDelta));
+      isColliding = this.collisionCheck(this.battleLanes[i].enemies[j], unitAhead, this.timeDelta);
+
+      // this.collisionCheck(this.battleLanes[i].enemies[j], this.battleLanes[i].enemies[j] - 1)
+      this.battleLanes[i].enemies[j].update(ctx, this.timeDelta, isColliding);
+
+      // Check if the unit ahead of you is the hero in your lane
+      if (isColliding && unitAhead === this.battleLanes[i].hero) {
+        // Attack if you can!
+        this.battleLanes[i].enemies[j].attackUnit(unitAhead, this.timeDelta);
+      }
     }
   }
 }
 
 Battleground.prototype.collisionCheck = function(testEnemy, unitAhead, timeDelta) {
-  if (unitAhead && testEnemy.pos_y + testEnemy.unitHeight + (testEnemy.walkSpeed / timeDelta) >= unitAhead.pos_y) {
+  if (unitAhead && testEnemy.pos_y + testEnemy.scaleHeight + (testEnemy.walkSpeed / timeDelta) >= unitAhead.pos_y) {
     // NEED: getter, setter functions for this
-    testEnemy.pos_y = unitAhead.pos_y - testEnemy.unitHeight;
+    testEnemy.pos_y = unitAhead.pos_y - testEnemy.scaleHeight;
     return true;
   } else {
     return false;
@@ -123,12 +130,12 @@ Battleground.prototype.lossCheck = function() {
 Battleground.prototype.spawnHeroToLane = function(laneNum) {
   var hero = this.unitManager.heroManager.spawnHero(0,
                                           this.battleLanes[laneNum].x,
-                                          this.battleLanes[laneNum].height-72)
+                                          this.battleLanes[laneNum].height-66)
   this.battleLanes[laneNum].hero = hero;
 }
 
 Battleground.prototype.spawnAllHeroes = function(laneNum) {
-  for (var i = 0; i < this.battleLanes.length-2; i++) {
+  for (var i = 0; i < this.battleLanes.length; i++) {
     this.spawnHeroToLane(i);
   }
 }
@@ -138,6 +145,7 @@ Battleground.prototype.updateHeroes = function(ctx) {
   for (var i = 0; i < this.battleLanes.length; i++) {
     if (this.battleLanes[i].hero)
       this.battleLanes[i].hero.update(ctx, this.timeDelta)
+      console.log(`Hero ${i} HP: ${this.battleLanes[i].hero.hitpoints}`)
   }
 }
 
