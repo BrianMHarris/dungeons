@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
   <!-- JavaScript Library -->
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -34,65 +35,69 @@
             </button>
             <!-- Just an image -->
             <a class="navbar navbar-light bg-faded">
-              <img src="/static/img/Skull.png" width="48" height="48" alt="">
+              <img src="/static/img/Skull3.png" width="48" height="48" alt="">
             </a>
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <div class="">
-                <ul class="nav navbar-nav">
-                  <li class=""><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
-                  <li><a class="navbar-link" href="#">About</a></li>
-                  <li><a href="{{ url_for('games.index') }}">Games</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
+              <ul class="nav navbar-nav">
+                <li id="btn-nav-home"><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="{{ url_for('games.index') }}">Games</a></li>
+
+              </ul>
             </div>
+            <div class="nav navbar-nav divider-vertical">
+            </div>
+            <div class="nav navbar-nav navbar-center">
+             <ul class="nav navbar-nav">
+                <li><a id="btn-nav-about" class="navbar-link" href="{{ url_for('home.index', _anchor='about') }}">About</a></li>
+                <!-- below enables slow scrolling -->
+                <!-- <li><a id="btn-nav-about" class="navbar-link" href="#about">About</a></li> -->
+                <li><a id="btn-nav-contact" class="navbar-link" href="{{ url_for('home.index', _anchor='contact') }}">Contact</a></li>
+              </ul>
+            </div>
+
             <div class="">
               <ul class="nav navbar-nav navbar-right">
-                {% if current_user.is_authenticated %}
-                  <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.username }}<b class="caret"></b></a>
-                    <ul class="dropdown-menu dropdown-user">
-                      <li><a href="#"><span class="glyphicon glyphicon-edit"></span> Edit Profile </a></li>
-                      <li class="divider"></li>
-                      <li><a href="{{ url_for('users.logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
-                    </ul>
-                  </li>
-                {% else %}
-                  <li id="link-user class="">
+                <li id="link-user class="">
+                  {% if current_user.is_authenticated %}
                     <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <b class="caret"></b></a>
-                    <ul class="dropdown-menu dropdown-menu-right dropdown-login">
-                      <div class="form-entry">
-                        <form method="POST" action="{{ url_for('users.login') }}">
-                          {{ g.login_form.csrf_token }}
-                          {% for field in g.login_form if field.widget.input_type != 'hidden'%}
-                            {{ field.label }}  {{ field }}
-                            <span>
-                              {% if field.errors %}
-                                {% for error in field.errors %}
-                                  {{ error }}
-                                {% endfor %}
-                              {% endif %}
-                            </span>
-                          {% endfor %}
-                          <button type="submit">
-                            Login
-                          </button>
-                        </form>
-                      </div>
-                      <li class="divider"></li>
-                      <div class="user_signup">
-                        No profile yet?
-                        <a href="{{ url_for('users.index') }}">
-                          Sign Up
-                        </a> now!<br>It's free, easy, and <strong>mostly</strong> painless!
-                      </div>
-                    </ul>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.username }}<b class="caret"></b></a>
+                      <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><span class="glyphicon glyphicon-edit"></span> Edit Profile </a></li>
+                        <li class="divider"></li>
+                        <li><a href="{{ url_for('users.logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
+                      </ul>
                   </li>
-                  </li>
-                {% endif %}
+                  {% else %}
+                    <li><a class="navbar-link" href="{{ url_for('users.index') }}">Sign Up!</a></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <b class="caret"></b></a>
+                      <ul class="dropdown-menu dropdown-menu-right dropdown-login">
+                        <div class="form-entry">
+                          <form method="POST" action="{{ url_for('users.login') }}">
+                            {{ g.login_form.csrf_token }}
+                            {% for field in g.login_form if field.widget.input_type != 'hidden'%}
+                              {{ field.label }}  {{ field }}
+                              <span>
+                                {% if field.errors %}
+                                  {% for error in field.errors %}
+                                    {{ error }}
+                                  {% endfor %}
+                                {% endif %}
+                              </span>
+                            {% endfor %}
+                            <button type="submit">
+                              Login
+                            </button>
+                          </form>
+                        </div>
+                      </ul>
+                    </li>
+                  {% endif %}
+                </li>
               </ul>
             </div>
           </div><!-- /.navbar-collapse -->
@@ -102,7 +107,7 @@
     <!-- title row -->
     <div class="row title-bar fixed-top">
       <div class="title_center col-xs-offset-2 col-xs-8">
-        <img src="/static/img/EZ-Games.png" alt="">
+        <img width=400 height=125 src="/static/img/Skull-Brand.png" alt="">
       </div>
     </div>
     <div class="row divider footer-divider"></div>

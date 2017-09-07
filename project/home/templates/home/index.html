@@ -1,8 +1,22 @@
 {% extends 'base.html' %}
 
+<!-- inside this block, the columns are reset to 12, but inside the container from base.html's 8 -->
 {% block content %}
-
-Home Index - Make resource
-
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home/home.css') }}">
+<div id="news" class="row section-title col-xs-12">
+  <div class="section-title-text">
+    NEWS
+  </div>
+</div>
+<div id="about" class="row section-title col-xs-12">
+  <div class="section-title-text">
+    ABOUT
+  </div>
+</div>
+<div id="contact" class="row section-title col-xs-12">
+  <div class="section-title-text">
+    CONTACT
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/home/index.js') }}"></script>
 {% endblock %}

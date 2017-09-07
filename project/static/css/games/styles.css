@@ -3,11 +3,11 @@
 }
 
 .game-entry-container {
-  margin-bottom: 2px;
+
 }
 
 .panel {
-  background-color: rgba(143, 188, 139, 0.35);;
+  background-color: rgba(170,197,97, 0.5);/*rgba(143, 188, 139, 0.35);*/
   border-color: black;
 }
 
