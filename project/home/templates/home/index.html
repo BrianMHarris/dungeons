@@ -3,19 +3,52 @@
 <!-- inside this block, the columns are reset to 12, but inside the container from base.html's 8 -->
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home/home.css') }}">
-<div id="news" class="row section-title col-xs-12">
-  <div class="section-title-text">
-    NEWS
+<div id="news" class="row section-news section-container">
+  <div class="section-title col-xs-12">
+    <div class="section-title-text">
+      NEWS
+    </div>
+  </div>
+  <div class="section-panel col-xs-12">
+    <div class="section-article-title">
+      New: Raid!
+    </div>
+    <div class="section-article-body">
+      A new gameplay prototype has been added to the Games section. This RPG-meets-puzzler is in early stages of development so keep an eye out for updates!
+    </div>
+    <div class="section-article-divider"></div>
+    <div class="section-article-title">
+      Website Launch!
+    </div>
+    <div class="section-article-body">
+      Welcome to EZ-Games! A portal for developers to showcase their game projects.
+    </div>
   </div>
 </div>
-<div id="about" class="row section-title col-xs-12">
-  <div class="section-title-text">
-    ABOUT
+<div id="about" class="row section-about section-container">
+  <div class="section-title col-xs-12">
+    <div class="section-title-text">
+      ABOUT
+    </div>
+  </div>
+  <div class="section-panel col-xs-12">
+    <div class="jumbotron section-article-jumbo">
+      This site is intended for developers to demonstrate prototypes for gameplay, systems, effects, and more.
+    </div>
   </div>
 </div>
-<div id="contact" class="row section-title col-xs-12">
-  <div class="section-title-text">
-    CONTACT
+<div id="contact" class="row section-contact section-container">
+  <div class="section-title col-xs-12">
+    <div class="section-title-text">
+      CONTACT
+    </div>
+  </div>
+  <div class="section-panel col-xs-12">
+    <div class="jumbotron section-article-jumbo">
+      I'm always happy to answer questions regarding the site, prototyping, and anything else you can think of.
+      <br>
+      Email: brianharrisdesign@gmail.com
+    </div>
   </div>
 </div>
 <script src="{{ url_for('static', filename='js/home/index.js') }}"></script>
