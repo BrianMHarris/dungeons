@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/users/users.css') }}">
   <p>
     Username: {{ user.username }} <br>
     Avatar: <img src="{{ user.image_url }}" alt="<User Avatar>" width=96 height=96>

@@ -45,7 +45,6 @@
               <ul class="nav navbar-nav">
                 <li id="btn-nav-home"><a href="{{ url_for('root') }}">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="{{ url_for('games.index') }}">Games</a></li>
-
               </ul>
             </div>
             <div class="nav navbar-nav divider-vertical">
@@ -67,13 +66,14 @@
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ current_user.username }}<b class="caret"></b></a>
                       <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><span class="glyphicon glyphicon-edit"></span> Edit Profile </a></li>
+                        <li><a href="{{ url_for('users.show', id=current_user.id) }}"><span class="glyphicon glyphicon-list-alt"></span> View Profile </a></li>
                         <li class="divider"></li>
                         <li><a href="{{ url_for('users.logout') }}"><span class="glyphicon glyphicon-log-in"></span> Logout </a></li>
                       </ul>
                   </li>
                   {% else %}
                     <li><a class="navbar-link" href="{{ url_for('users.index') }}">Sign Up!</a></li>
+                    <div class="nav navbar-nav divider-vertical"></div>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login <b class="caret"></b></a>
                       <ul class="dropdown-menu dropdown-menu-right dropdown-login">

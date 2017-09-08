@@ -3,16 +3,16 @@ from wtforms import StringField
 from wtforms import validators
 
 class UserSignupForm(FlaskForm):
-    username = StringField('User Name', validators=[validators.DataRequired()])
-    email = StringField("Email", validators=[validators.Email(message="Please enter a valid email")])
-    password = StringField('Password', validators=[validators.DataRequired()])
-    password_confirm = StringField('Confirm Password', validators=[validators.DataRequired()])
+    username = StringField('username', default="username *", validators=[validators.DataRequired()])
+    email = StringField("email", default="your@email.com *", validators=[validators.Email(message="Please enter a valid email")])
+    password = StringField('password', default="password *", validators=[validators.DataRequired()])
+    password_confirm = StringField('confirm', default="confirm *", validators=[validators.DataRequired()])
 
 class UserLoginForm(FlaskForm):
-    username = StringField('User Name', validators=[validators.DataRequired()])
-    password = StringField('Password', validators=[validators.DataRequired()])
+    username = StringField('username', validators=[validators.DataRequired()])
+    password = StringField('password', validators=[validators.DataRequired()])
 
 class UserForm(FlaskForm):
-    username = StringField('User Name', validators=[validators.DataRequired()])
-    email = StringField("Email", validators=[validators.Email(message="Please enter a valid email")])
-    image_url = StringField('Image URL', [validators.Length(validators.DataRequired())])
+    username = StringField('username', validators=[validators.DataRequired()])
+    email = StringField("email", validators=[validators.Email(message="Please enter a valid email")])
+    image_url = StringField('avatar (URL)', [validators.Length(validators.DataRequired())])

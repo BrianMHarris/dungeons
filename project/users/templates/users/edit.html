@@ -1,27 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/users/users.css') }}">
+  <div class="row col-xs-12">
+    <div class="jumbotron col-xs-8 col-xs-offset-2 form-signup form-text form-pad">
+      <div class="form-title">
+        Edit Profile
+      </div>
+      <form method="POST" action="{{ url_for('users.show', id=id) }}?_method=PATCH">
+        {{ form.csrf_token }}
+        {% for field in form if field.widget.input_type != 'hidden'%}
+          <div >
+            {{ field.label }}
+          </div>
+          <div class="form-field">
+            {{ field }}
+            <span>
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              {% endif %}
+            </span>
+          </div>
+        {% endfor %}
+        <button class="btn button-submit" type="submit">Save Settings</button>
+      </form>
+      <div class="form-signup-blurb">
+        Edit your profile because you are awesome!
+      </div>
+    </div>
+  </div>
+  <div class="row col-xs-12">
+    <div class="delete-container">
+      <form method="POST" action="{{url_for('users.delete', id=id)}}?_method=DELETE">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn button-delete" type="submit">DELETE USER</button>
+      </form>
+    </div>
 
-  <form method="POST" action="{{ url_for('users.show', id=id) }}?_method=PATCH">
-    {{ form.csrf_token }}
-    {% for field in form if field.widget.input_type != 'hidden'%}
-      <p>
-      {{ field.label }}
-      {{ field }}
-      <span>
-        {% if field.errors %}
-          {% for error in field.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-    </p>
-    {% endfor %}
-    <button type="submit">Save Settings</button>
-  </form>
-  <form method="POST" action="{{url_for('users.delete', id=id)}}?_method=DELETE">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit">DELETE USER</button>
-  </form>
-
+  </div>
 {% endblock %}

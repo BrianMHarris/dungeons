@@ -27,11 +27,15 @@ body {
   margin-bottom: 0;
 }
 
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+  color: #eb542e;  /*Sets the text hover color on navbar*/
+}
+
 .divider-vertical {
   height: 50px;
   margin: 0 9px;
-  border-left: 1px solid #F2F2F2;
-  border-right: 1px solid #FFF;
+  border-left: 1px solid #E1DFD9;
+  border-right: 1px solid #E1DFD9;
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -67,7 +71,7 @@ body {
 .footer-divider {
   background-color: #eb542e;
   opacity: 0.5;
-  height: 3px;
+  height: 4px;
 }
 
 .footer-container {

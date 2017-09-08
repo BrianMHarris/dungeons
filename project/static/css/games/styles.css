@@ -2,13 +2,10 @@
   text-align: center;
 }
 
-.game-entry-container {
-
-}
-
-.panel {
-  background-color: rgba(170,197,97, 0.5);/*rgba(143, 188, 139, 0.35);*/
+.well {
+  background-color: rgba(170,197,97, 0.3);/*rgba(143, 188, 139, 0.35);*/
   border-color: black;
+  border-width: 2px;
 }
 
 .game-entry-title {

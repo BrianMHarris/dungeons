@@ -1,0 +1,64 @@
+.form-signup {
+ /* margin-top: 24px;
+  text-align: center;
+  font-size: 24px;
+  color: white;*/
+  /*background-color: #525252;*/
+
+  background-image: -webkit-linear-gradient(left top, #323232 0%, #525252 80%);
+  background-image: -moz-linear-gradient(bottom right, #323232 0%, #525252 80%);
+  background-image: -ms-linear-gradient(to bottom right, #323232 0%, #525252 80%);
+  background-image: -o-linear-gradient(bottom right, #323232 0%, #525252 80%);
+  background-image: linear-gradient(to bottom right, #323232 0%, #525252 80%);
+}
+
+.form-title {
+  text-align: center;
+  font-size: 32px;
+  color: white;
+  margin-bottom: 20px;
+  color: #eb542e;
+}
+
+.form-text {
+  text-align: center;
+  font-size: 24px;
+  color: white;
+}
+
+.form-pad {
+  margin-top: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.form-field {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: black;
+  /*background-color: white;*/
+}
+
+.button-submit {
+  width: 256px;
+  font-size: 24px;
+  color:black;
+  background: #aac561;
+}
+
+.form-signup-blurb {
+  font-size: 18px;
+  padding-top: 10px;
+}
+
+.delete-container {
+  text-align: center;
+}
+
+.button-delete {
+  width: 192px;
+  font-size: 20px;
+  color: white;
+  background: #cc1d03;
+  border: 5px solid black;
+}

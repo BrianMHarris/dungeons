@@ -11,45 +11,43 @@
   {% for game in games_list.items %}
     {% if game.resource_path %}
       <div class="row game-entry-container col-xs-10 col-xs-offset-1">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div class="media">
-              <a class="pull-left" href="{{ url_for('games.show', title=game.resource_path) }}">
-                <img class="img-circle img-responsive" width=128 height=128 src="{{ url_for('static', filename='img/' + game.resource_path + '/' + game.image_url) }}" alt="<No image found>">
-              </a>
-              <div class="media-body">
-                <!-- <h2 class="media-heading"> -->
-                <div>
-                  <h4>
-                    <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">
-                      {{ game.title }}
-                    </a>
-                    {% if game.genres %}
-                      {% for genre in game.genres %}
-                        <span class="game-entry-genre">
-                          <span class="label label-primary">
-                            {{ genre.name }}
-                          </span>
+        <div class="well">
+          <div class="media">
+            <a class="pull-left" href="{{ url_for('games.show', title=game.resource_path) }}">
+              <img class="img-circle img-responsive" width=128 height=128 src="{{ url_for('static', filename='img/' + game.resource_path + '/' + game.image_url) }}" alt="<No image found>">
+            </a>
+            <div class="media-body">
+              <!-- <h2 class="media-heading"> -->
+              <div>
+                <h4>
+                  <a class="game-entry-title" href="{{ url_for('games.show', title=game.resource_path) }}">
+                    {{ game.title }}
+                  </a>
+                  {% if game.genres %}
+                    {% for genre in game.genres %}
+                      <span class="game-entry-genre">
+                        <span class="label label-primary">
+                          {{ genre.name }}
                         </span>
-                      {% endfor %}
-                    {% endif %}
-                  </h4>
+                      </span>
+                    {% endfor %}
+                  {% endif %}
+                </h4>
+              </div>
+              <div class="game-entry-desc">
+                {{ game.description }}
+              </div>
+              <div class="row game-author-container col-xs-12">
+                <div class="game-entry-author col-xs-7">
+                  by: <strong>{{ game.author }}</strong>
                 </div>
-                <div class="game-entry-desc">
-                  {{ game.description }}
+                <div class="game-entry-date col-xs-4 col-xs-offset-1">
+                  Date: {{ game.submission_date}}
                 </div>
-                <div class="row game-author-container col-xs-12">
-                  <div class="game-entry-author col-xs-7">
-                    by: {{ game.author }}
-                  </div>
-                  <div class="game-entry-date col-xs-4 col-xs-offset-1">
-                    Date: {{ game.submission_date}}
-                  </div>
-                </div>
-              </div> <!-- end media body -->
-            </div> <!-- end media -->
-           </div> <!-- end panel body -->
-        </div> <!-- end panel -->
+              </div>
+            </div> <!-- end media body -->
+          </div> <!-- end media -->
+        </div> <!-- end well -->
       </div> <!-- end media row -->
     {% endif %}
   {% endfor %}
