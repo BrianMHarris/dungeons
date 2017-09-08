@@ -5,6 +5,7 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   this.imgMan = imageManager.instance();
   this.numLanes = numLanes;
   this.battleLanes = [];  // container for multiple lanes, which will handle spawning enemies
+  this.swapButtons = [];
   this.unitManager = new UnitManager();
   this.unitManager.addEnemySpawners();
   this.unitManager.addHeroSpawners();
@@ -31,6 +32,18 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   for (var i = 0; i < numLanes; i++) {
     this.battleLanes.push(new BattleLane(this.laneMargin + (i * this.laneMargin) + (i*laneWidth),
                       laneWidth, height));
+  }
+
+  this.imgMan.loadImage("swap", '/static/img/raid/swap.png');
+  // create all of the swap buttons
+  for (var j = 0; j < this.battleLanes.length - 1; j++) {
+    this.swapButtons.push(new SwapButton(
+        this.imgMan.getImageByName("swap"),
+        this.battleLanes[j].x + laneWidth,
+        this.laneHeight - 66,
+        this.laneMargin,
+        64
+      ));
   }
 }
 
@@ -62,6 +75,12 @@ Battleground.prototype.getLivesRemaining = function() {
   return this.enemyOOBoundsLimit - this.enemiesOutOfBounds;
 }
 
+Battleground.prototype.displaySwapButtons = function() {
+  for (var i = 0; i < this.swapButtons.length; i++) {
+    this.swapButtons[i].display(this.ctx);
+  }
+}
+
 Battleground.prototype.initEnemySpawning = function(low=1000, high=1000) {
   this.enemySpawnLow = low;
   this.enemySpawnHigh = high;
@@ -77,7 +96,7 @@ Battleground.prototype.spawnEnemyToLane = function(laneNum) {
 }
 
 // spawn new enemies if necessary and update existing
-Battleground.prototype.updateEnemies = function(ctx) {
+Battleground.prototype.updateEnemies = function() {
   // if there is a scheduled spawn time for an enemy
   //   and the time passed is greater than that time, spawn!
   if (this.enemySpawnNext &&
@@ -129,7 +148,7 @@ Battleground.prototype.updateEnemies = function(ctx) {
         this.battleLanes[i].enemies[j].attackUnit(unitAhead, this.timeDelta);
       }
       // this.collisionCheck(this.battleLanes[i].enemies[j], this.battleLanes[i].enemies[j] - 1)
-      this.battleLanes[i].enemies[j].update(ctx, this.timeDelta, isColliding);
+      this.battleLanes[i].enemies[j].update(this.ctx, this.timeDelta, isColliding);
     }
   }
 }
@@ -234,4 +253,16 @@ function BattleLane(x, width, height) {
   this.height = height;
   this.enemies = [];
   this.hero = null;
+}
+
+function SwapButton(image, x, y, width, height) {
+  this.img = image;
+  this.x = x;
+  this.y = y;
+  this.drawWidth = width;
+  this.drawHeight = height;
+}
+
+SwapButton.prototype.display = function(ctx) {
+  ctx.drawImage(this.img, this.x, this.y, this.drawWidth, this.drawHeight);
 }

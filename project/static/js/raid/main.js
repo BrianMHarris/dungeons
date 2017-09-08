@@ -53,7 +53,8 @@ function main() {
     // Update all of the game entities
     battleGround.updateTimeStamp(time);
     battleGround.updateHeroes(ctx);
-    battleGround.updateEnemies(ctx);
+    battleGround.updateEnemies();
+    battleGround.displaySwapButtons();
 
 
     // Test if the enemies have stacked or all the heroes are dead.
