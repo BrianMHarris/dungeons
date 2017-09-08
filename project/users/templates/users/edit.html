@@ -33,11 +33,7 @@
   </div>
   <div class="row col-xs-12">
     <div class="delete-container">
-      <form method="POST" action="{{url_for('users.delete', id=id)}}?_method=DELETE">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="btn button-delete" type="submit">DELETE USER</button>
-      </form>
+      <a class="btn button-delete" href="{{url_for('users.delete', id=id)}}">DELETE USER</a>
     </div>
-
   </div>
 {% endblock %}

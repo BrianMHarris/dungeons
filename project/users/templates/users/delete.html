@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Delete User Profile</h2>
-  <h3>Please enter username and password to confirm.</h3>
-  <form method="POST" action="{{url_for('users.delete', id=id)}}?_method=DELETE">
-    {{ form_login.csrf_token }}
-    {% for field in form_login if field.widget.input_type != 'hidden'%}
-      <p>
-      {{ field.label }}
-      {{ field }}
-      <span>
-        {% if field.errors %}
-          {% for error in field.errors %}
-            {{ error }}
-          {% endfor %}
-        {% endif %}
-      </span>
-    </p>
-    {% endfor %}
-    <h3>This process is not reversible.</h3>
-    <button type="submit">Confirm Delete</button>
-  </form>
-
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/users/users.css') }}">
+  <div class="row col-xs-12">
+    <div class="jumbotron col-xs-8 col-xs-offset-2 form-signup form-text form-pad">
+      <div class="form-title">
+        Delete Profile
+      </div>
+      <div class="form-subtext">
+        Enter your username and password to confirm.
+      </div>
+      <form method="POST" action="{{url_for('users.delete', id=id)}}?_method=DELETE">
+        {{ form_login.csrf_token }}
+        {% for field in form_login if field.widget.input_type != 'hidden'%}
+          <div >
+            {{ field.label }}
+          </div>
+          <div class="form-field">
+            {{ field }}
+            <span>
+              {% if field.errors %}
+                {% for error in field.errors %}
+                  {{ error }}
+                {% endfor %}
+              {% endif %}
+            </span>
+          </div>
+        {% endfor %}
+        <button class="btn button-delete" type="submit">Confirm Delete</button>
+      </form>
+      <div class="form-signup-blurb">
+        Warning: This action cannot be undone.
+      </div>
+    </div>
+  </div>
 {% endblock %}

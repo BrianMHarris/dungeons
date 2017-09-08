@@ -8,12 +8,8 @@ body {
 }
 
 .title-bar {
-  /*background-color: black;*/
   background-image: url("/static/img/dark_matter.png");
   background-repeat: repeat;
-  /*position: fixed;
-  top: 0;
-  width: 100%;*/
 }
 
 .title_center {
@@ -56,6 +52,10 @@ body {
   text-align: right;
 }
 
+.dropdown-style {
+ /*background-color: #525252;*/
+}
+
 .form-entry {
   text-align: right;
   margin-right: 10px;
@@ -79,4 +79,9 @@ body {
   background-repeat: repeat;
   color: white;
   min-height: 50px;
+}
+
+.flash-messages{
+  text-align: center;
+  font-size: 18px;
 }

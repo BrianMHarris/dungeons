@@ -1,10 +1,4 @@
 .form-signup {
- /* margin-top: 24px;
-  text-align: center;
-  font-size: 24px;
-  color: white;*/
-  /*background-color: #525252;*/
-
   background-image: -webkit-linear-gradient(left top, #323232 0%, #525252 80%);
   background-image: -moz-linear-gradient(bottom right, #323232 0%, #525252 80%);
   background-image: -ms-linear-gradient(to bottom right, #323232 0%, #525252 80%);
@@ -18,6 +12,10 @@
   color: white;
   margin-bottom: 20px;
   color: #eb542e;
+}
+
+.form-subtext {
+  font-size: 18px;
 }
 
 .form-text {
@@ -36,7 +34,6 @@
   margin-top: 10px;
   margin-bottom: 10px;
   color: black;
-  /*background-color: white;*/
 }
 
 .button-submit {
@@ -61,4 +58,22 @@
   color: white;
   background: #cc1d03;
   border: 5px solid black;
+}
+
+.button-edit {
+  width: 128px;
+  font-size: 18px;
+  color:black;
+  background: #aac561;
+}
+
+.button-logout {
+  width: 128px;
+  font-size: 18px;
+  color:black;
+  background: #dfdfdf;
+}
+
+.buttons-edit {
+  text-align: center;
 }

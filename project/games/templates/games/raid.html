@@ -12,7 +12,8 @@
         <h4>"name of dungeon"</h4>
       </div>
       <div id="header_gold" class="game-header-label">
-        <h4>Gold</h4>
+        <span>Gold: </span><span id="player-gold"></span>
+        <span>Lives: </span><span id="player-lives"></span>
       </div>
     </div>
     <div class="container_canvas full-width">
@@ -42,6 +43,7 @@
   <!-- requires a simple server for testing -->
   <script src="{{ url_for('static', filename='js/raid/imageManager.js') }}"></script>
   <script src="{{ url_for('static', filename='js/raid/globals.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/raid/effectManager.js') }}"></script>
   <script src="{{ url_for('static', filename='js/raid/unitManager.js') }}"></script>
   <script src="{{ url_for('static', filename='js/raid/unit.js') }}"></script>
   <script src="{{ url_for('static', filename='js/raid/battleground.js') }}"></script>

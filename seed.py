@@ -82,6 +82,7 @@ def seed_final():
     raid.genres.extend([rpg, puzzle])
     db.session.add(raid)
     db.session.commit()
+    print("seed_all: Games")
 
 
 if __name__ == "__main__":

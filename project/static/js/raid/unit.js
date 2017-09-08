@@ -1,12 +1,14 @@
-function Unit(name, jobClass, imageName, pos_x=0, pos_y=0) {
+function Unit(name, jobClass, type, imageName, pos_x=0, pos_y=0) {
   // this.ctx = ctx;
   // this.urlImage = urlImage
   this.name = name;
   this.expLevel = 1;
   this.currentExp = 0;
   this.attackTimeAccrued = 0;
+  this.isDead = false;
 
   // put this into an object
+  this.type = type;
   this.jobName = jobClass.jobName;
   this.hitpoints = jobClass.hitpoints;
   this.element = jobClass.element;
@@ -26,26 +28,34 @@ function Unit(name, jobClass, imageName, pos_x=0, pos_y=0) {
   this.avatar = new Avatar(imageName, Math.floor(Math.random() * 3), 1, this.scaleWidth, this.scaleHeight);
 }
 
-// update animations and movement
+// update animations and movement. returns true if still updating, false if dead and taken out (enemies)
 Unit.prototype.update = function(ctx, timeDelta, standStill=false) {
     this.collided = standStill; // A bit of a hack for fail-case check in battleground::lossCheck
-    this.avatar.renderAnim(ctx, this.pos_x, this.pos_y, timeDelta, standStill);
 
     // if this unit walks, scaled its speed by time past for smooth movement
     if (this.walkSpeed > 0 && standStill == false) {
       this.pos_y = this.pos_y + (this.walkSpeed / timeDelta);
     }
+
+    this.avatar.renderAnim(ctx, this.pos_x, this.pos_y, timeDelta, standStill, this.type);
 }
 
 // determines the correct frame of animation and speed
 Unit.prototype.attackUnit = function(target, timeDelta) {
   this.attackTimeAccrued += timeDelta;
-  console.log(`${this.name} attacking ${target.name}`)
+
   // 250 is like 0 atk speed (make a global?!)
   if (target.hitpoints > 0 && this.attackTimeAccrued > 1000 * (this.attackSpd / 100) + 250) {
-    target.takeDamage(this.attack);
     this.attackTimeAccrued = 0;
+
+    console.log(`${this.name} attacking ${target.name}`)
+
+    // deal some damage and return TRUE if the enemy target is killed
+    return target.takeDamage(this.attack);
   }
+
+  // the enemy wasn't killed
+  return false;
 }
 
 Unit.prototype.takeDamage = function(enemyAttack) {
@@ -54,6 +64,27 @@ Unit.prototype.takeDamage = function(enemyAttack) {
 
   this.hitpoints = this.hitpoints - (enemyAttack * finalMod);
   this.hitpoints = (this.hitpoints <= 0)? 0 : this.hitpoints;
+
+  if (this.hitpoints <= 0) {
+      // just once we should set them to dead, not in above line for spawning one-off death effects
+      if (this.isDead === false) {
+        this.isDead = true;
+        this.avatar.dead(true);
+        return true; // was killed!
+      }
+  }
+
+  // they didn't die this round
+  return false;
+}
+
+Unit.prototype.deadCheck = function() {
+  return this.isDead;
+}
+
+// this is a check if enemies have passed the hero unit. ENEMY ONLY
+Unit.prototype.pastHeroLine = function(heroUnit) {
+  return this.pos_y >= heroUnit.pos_y;
 }
 
 Unit.prototype.boundsCheck = function(laneHeight) {
@@ -70,8 +101,10 @@ function Avatar(imageName, startFrame=0, startAnim=1, drawWidth, drawHeight) {
   this.timePerFrame = 333;  // ~30 fps
   this.drawWidth = drawWidth;
   this.drawHeight = drawHeight;
+  this.renderDead = false;
 
   this.image = imageManager.instance().getImageByName(imageName);
+  this.deadImg = imageManager.instance().getImageByName("dead");
 }
 
 // let the game know this avatar is ready to display
@@ -79,9 +112,24 @@ Avatar.prototype.imageLoaded = function() {
   this.imgLoaded = true;
 }
 
+// getter/setter
+Avatar.prototype.dead = function(isDead) {
+  if (isDead) {
+    this.renderDead = true;
+  }
+  return this.renderDead;
+}
+
 // determines the correct frame of animation and speed
 Avatar.prototype.renderAnim = function(ctx, pos_x, pos_y,
-    timeDelta=0, standStill=false) {
+    timeDelta=0, standStill=false, type='hero') {
+  if (this.renderDead) {
+    if (type === 'hero')
+      ctx.drawImage(this.deadImg, 0, 0, 32, 32, pos_x, pos_y, this.drawWidth, this.drawHeight);
+    return;
+  }
+
+  // Are we standing still? If not, keep flipping anim cells
   if (standStill) {
     this.currentFrame == 0;
   } else {

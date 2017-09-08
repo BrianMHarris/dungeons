@@ -4,7 +4,7 @@ var globalSettings = (function() {
   var instance;
 
   function initialize() {
-    var debugMode=true;
+    var debugMode=false;
     // Store the width and the height. later, set the style of the container div to these values
     return {
       getDebugMode: function(){

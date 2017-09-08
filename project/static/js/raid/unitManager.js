@@ -5,9 +5,8 @@
 */
 
 function UnitManager() {
-  this.imageCache = {}; // object container k,v pair representing "name":"url" of image
-  this.enemyManager = new EnemyManager(this.imageCache); // kind of dirty to pass imageCache but simplest method atm
-  this.heroManager = new HeroManager(this.imageCache);
+  this.enemyManager = new EnemyManager();
+  this.heroManager = new HeroManager();
 }
 
 UnitManager.prototype.addEnemySpawners = function() {
@@ -16,12 +15,14 @@ UnitManager.prototype.addEnemySpawners = function() {
                         name: 'Skeleton',
                         img: 'Skeleton_2.png',
                         imgUrl: `/static/img/raid/Skeleton_2.png`,
+                        type: 'enemy'
                       }];
 
   for (var i = 0; i < tempEnemyList.length; i++) {
     this.enemyManager.addSpawner(tempEnemyList[i]['name'],
                     tempEnemyList[i]['img'],
-                    tempEnemyList[i]['imgUrl'])
+                    tempEnemyList[i]['imgUrl'],
+                    tempEnemyList[i]['type'])
   }
 }
 
@@ -30,24 +31,27 @@ UnitManager.prototype.addHeroSpawners = function() {
   var tempHeroList = [{
                         name: 'Golden Knight',
                         img: 'Knight_4.png',
-                        imgUrl: `/static/img/raid/Knight_4.png`
+                        imgUrl: `/static/img/raid/Knight_4.png`,
+                        deadImgUrl: `/static/img/raid/grave.png`,
+                        type:'hero'
                       }];
 
   for (var i = 0; i < tempHeroList.length; i++) {
     this.heroManager.addSpawner(tempHeroList[i]['name'],
                     tempHeroList[i]['img'],
-                    tempHeroList[i]['imgUrl'])
+                    tempHeroList[i]['imgUrl'],
+                    tempHeroList[i]['deadImgUrl'],
+                    tempHeroList[i]['type'])
   }
 }
 
 /*  EnemyManager   */
 
-function EnemyManager(imageCache) {
+function EnemyManager() {
   this.enemySpawners = []; // contains a spawner for each type of enemy. filled once per stage
-  this.imageCache = imageCache;
 }
 
-EnemyManager.prototype.addSpawner = function(name, img, imgUrl) {
+EnemyManager.prototype.addSpawner = function(name, img, imgUrl, type) {
   // create a new enemy spawner with appropriate settings
   var newEnemySpawner = {
     name: name,
@@ -65,9 +69,9 @@ EnemyManager.prototype.addSpawner = function(name, img, imgUrl) {
 
 var tempEnemyJob1 = {
   "jobName": "Skel-Soldier",
-  "hitpoints": 40,
+  "hitpoints": 60,
   "element": "earth",
-  "attack": 20,
+  "attack": 22,
   "defense": 15,
   "attackSpd": 30,
   "walkSpeed": 50
@@ -78,13 +82,9 @@ EnemyManager.prototype.spawnEnemy = function(enemyType=0, pos_x, pos_y) {
   var img = this.enemySpawners[enemyType].img;
   var imgUrl = this.enemySpawners[enemyType].imgUrl
 
-  if (!(img in this.imageCache)) {
-    this.imageCache[img] = new Image();
-    this.imageCache[img].src = imgUrl;
-  }
-
   var enemy = new Unit(this.enemySpawners[enemyType].name,
                         tempEnemyJob1,
+                        this.enemySpawners[enemyType].type,
                         this.enemySpawners[enemyType].img,
                         pos_x,
                         pos_y);
@@ -94,22 +94,24 @@ EnemyManager.prototype.spawnEnemy = function(enemyType=0, pos_x, pos_y) {
 
 /*  HeroManager   */
 
-function HeroManager(imageCache) {
+function HeroManager() {
   this.heroSpawners = []; // contains a spawner for each type of enemy. filled once per stage
-  this.imageCache = imageCache;
+  //this.imageCache = imageCache;
 }
 
-HeroManager.prototype.addSpawner = function(name, img, imgUrl) {
+HeroManager.prototype.addSpawner = function(name, img, imgUrl, deadImgUrl) {
   // create a new hero spawner with appropriate settings  NEED TO CONSOLIDATE WITH JOB CLASS
   var newHeroSpawner = {
     name: name,
     img: img,
     imgUrl: imgUrl,
+    deadImgUrl: deadImgUrl
   }
 
   // Load the appropriate image for later retrival
   var imgMan = imageManager.instance();
   imgMan.loadImage(img, imgUrl);
+  imgMan.loadImage("dead", deadImgUrl);
 
   // add the new enemy spawner to the spawners in Unit Manager
   this.heroSpawners.push(newHeroSpawner)
@@ -129,10 +131,10 @@ var tempHeroJob1 = {
 HeroManager.prototype.spawnHero = function(heroType=0, pos_x, pos_y) {
   var hero = new Unit(this.heroSpawners[heroType].name,
                         tempHeroJob1,
+                        this.heroSpawners[heroType].type,
                         this.heroSpawners[heroType].img,
                         pos_x,
                         pos_y);
   hero.avatar.setAnim(2);  // make sure heroes have correct anim
-  //debugger;
   return hero;
 }

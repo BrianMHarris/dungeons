@@ -1,4 +1,7 @@
 
+// TODO: Make this take a list of image urls and names (in an object) and load all at once.
+//  optimizes the unitmanager and effect manager big time.
+
 // Create this single image manager
 var imageManager = (function() {
   var instance;
