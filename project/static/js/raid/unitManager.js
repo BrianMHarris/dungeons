@@ -57,6 +57,7 @@ EnemyManager.prototype.addSpawner = function(name, img, imgUrl, type) {
     name: name,
     img: img,
     imgUrl: imgUrl,
+    type: type
   }
 
   // Load the appropriate image for later retrival
@@ -96,16 +97,16 @@ EnemyManager.prototype.spawnEnemy = function(enemyType=0, pos_x, pos_y) {
 
 function HeroManager() {
   this.heroSpawners = []; // contains a spawner for each type of enemy. filled once per stage
-  //this.imageCache = imageCache;
 }
 
-HeroManager.prototype.addSpawner = function(name, img, imgUrl, deadImgUrl) {
+HeroManager.prototype.addSpawner = function(name, img, imgUrl, deadImgUrl, type) {
   // create a new hero spawner with appropriate settings  NEED TO CONSOLIDATE WITH JOB CLASS
   var newHeroSpawner = {
     name: name,
     img: img,
     imgUrl: imgUrl,
-    deadImgUrl: deadImgUrl
+    deadImgUrl: deadImgUrl,
+    type: type
   }
 
   // Load the appropriate image for later retrival

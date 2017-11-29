@@ -24,6 +24,10 @@ function Battleground(ctx, width, height, numLanes, laneWidth) {
   this.enemiesOutOfBounds = 0;
   this.enemyOOBoundsLimit = 10;
 
+  // effects
+  this.enemyEffectManager = new EffectManager();
+  this.heroEffectManager = new EffectManager();
+
   this.fullWidth = width;
   this.laneHeight = height;
   this.laneMargin = (width - (numLanes * laneWidth)) / (numLanes + 1);
@@ -118,13 +122,10 @@ Battleground.prototype.updateEnemies = function() {
   // loop through each enemy in each battle lane and update animations, etc
   for (var i = 0; i < this.battleLanes.length; i++) {
     // Get rid of any dead enemies.
-    for (var k = 0; k < this.battleLanes[i].enemies.length; k++) {
+    //for (var k = 0; k < this.battleLanes[i].enemies.length; k++) {
       // if any are dead just take them out and continue.
-      if (this.battleLanes[i].enemies[k].deadCheck()) {
-        this.battleLanes[i].enemies.splice(k, 1);
-        continue;
-      }
-    }
+
+    //}
 
      // TEST FOR OUT OF BOUNDS
     if (this.battleLanes[i].enemies.length >= 1 && this.battleLanes[i].enemies[0].boundsCheck(this.laneHeight)) {
@@ -135,6 +136,11 @@ Battleground.prototype.updateEnemies = function() {
     // reset whether it's colliding and keep checking
     isColliding = false;
     for (var j = 0; j < this.battleLanes[i].enemies.length; j++) {
+      if (this.battleLanes[i].enemies[j].deadCheck()) {
+        this.battleLanes[i].enemies.splice(j, 1);
+        continue;
+      }
+
       // TEST AGAINST OTHER UNITS
       // Either the unit ahead of us is an enemy or a hero.
       unitAhead = (j == 0)? this.battleLanes[i].hero : this.battleLanes[i].enemies[j-1];
@@ -145,12 +151,15 @@ Battleground.prototype.updateEnemies = function() {
       // Check if the unit ahead of you is the hero in your lane
       if (isColliding && unitAhead === this.battleLanes[i].hero) {
         // Attack if you can!
-        this.battleLanes[i].enemies[j].attackUnit(unitAhead, this.timeDelta);
+        this.battleLanes[i].enemies[j].attackUnit(unitAhead, this.timeDelta, this.enemyEffectManager);
       }
       // this.collisionCheck(this.battleLanes[i].enemies[j], this.battleLanes[i].enemies[j] - 1)
       this.battleLanes[i].enemies[j].update(this.ctx, this.timeDelta, isColliding);
     }
   }
+
+  // finally, update the enemy-related effects - needs to be last to draw over enemies
+  this.enemyEffectManager.updateEffects(this.ctx, this.timeDelta);
 }
 
 Battleground.prototype.collisionCheck = function(testEnemy, unitAhead, timeDelta) {
@@ -232,7 +241,8 @@ Battleground.prototype.updateHeroes = function(ctx) {
         // now we attack!
         if (isColliding && unitAhead) {
           // attack, and if true comes back, enemy has died.
-          if (this.battleLanes[i].hero.attackUnit(unitAhead, this.timeDelta)) {
+          if (this.battleLanes[i].hero.attackUnit(unitAhead, this.timeDelta,
+              this.enemyEffectManager)) {
             this.goldEarned += unitAhead.expLevel;
 
             if (this.globals.getDebugMode())
@@ -244,6 +254,9 @@ Battleground.prototype.updateHeroes = function(ctx) {
       this.battleLanes[i].hero.update(ctx, this.timeDelta)
     }
   }
+
+  // finally, update the hero-related effects - needs to be last to draw over enemies
+  this.heroEffectManager.updateEffects(this.ctx, this.timeDelta);
 }
 
 // a simple BattleLane object

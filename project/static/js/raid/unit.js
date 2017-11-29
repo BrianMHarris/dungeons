@@ -40,8 +40,33 @@ Unit.prototype.update = function(ctx, timeDelta, standStill=false) {
     this.avatar.renderAnim(ctx, this.pos_x, this.pos_y, timeDelta, standStill, this.type);
 }
 
-// determines the correct frame of animation and speed
-Unit.prototype.attackUnit = function(target, timeDelta) {
+var tempEffectList = {
+  hero: {
+    name: 'OrangeSword',
+    img: 'orange_sword.png',
+    imgUrl: `/static/img/raid/orange_sword.png`,
+    lifetime: 150,
+    frameDuration: 30,
+    numFrames: 5,
+    looping: false,
+    width: 192,
+    height: 192
+  },
+  enemy: {
+    name: 'BlueSword',
+    img: 'blue_sword.png',
+    imgUrl: `/static/img/raid/blue_sword.png`,
+    lifetime: 150,
+    frameDuration: 30,
+    numFrames: 5,
+    looping: false,
+    width: 192,
+    height: 192
+  }
+};
+
+// determines the correct frame of animation and speed. Takes in an effect manager to apply an effect with
+Unit.prototype.attackUnit = function(target, timeDelta, effectManager) {
   this.attackTimeAccrued += timeDelta;
 
   // 250 is like 0 atk speed (make a global?!)
@@ -50,10 +75,10 @@ Unit.prototype.attackUnit = function(target, timeDelta) {
 
     console.log(`${this.name} attacking ${target.name}`)
 
+    effectManager.applyEffect(tempEffectList[this.type], target, target.scaleWidth, target.scaleHeight)
     // deal some damage and return TRUE if the enemy target is killed
     return target.takeDamage(this.attack);
   }
-
   // the enemy wasn't killed
   return false;
 }
